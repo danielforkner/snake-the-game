@@ -124,14 +124,6 @@ body {
     animation-iteration-count: 1, infinite;
 }
 
-@media screen and (max-width: 800px) {
-    .boss {
-        /* right: 50px;
-        width: 75px; */
-    }
-    /* you can also lower the gameArea width and the cell size to maintain proportion */
-}
-
 .boss img {
     width: 100%;
 }
@@ -157,7 +149,20 @@ body {
 .cell {
     height: 15px;
     width: 15px;
+    transition: 1s ease;
     /* border: 1px solid blue; */
+}
+
+/* PLAYER PARTS */
+.head {
+    background: url(/images/snake.gif);
+    background-position: center; 
+    background-size: contain; 
+}
+.body {
+    background: url(/images/orb_green.png);
+    background-position: center; 
+    background-size: contain; 
 }
 
 .fire {
