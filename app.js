@@ -7,6 +7,12 @@ const HEIGHT = 300; // height of gameArea in px
 const WIDTH = 600; // width of gameArea in px
 const CELL_SIZE = 15; // hw of cell in px
 
+let gameState = {
+    currentScore: 0,
+    bossHealth: 100,
+    gameStatus: 'not playing',
+}
+
 btn.addEventListener('click', () => {
     // slitherIn(); add the .slither class. Then have the top image slide in for text.
     createGameArea();

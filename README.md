@@ -8,6 +8,6 @@ Assets:
 - snake: https://opengameart.org/content/a-snake
 - skull boss: https://opengameart.org/content/bevouliin-horns-skull-sprite-sheets
 - orbs: https://opengameart.org/content/pixel-orbs
-
-
-- mage?: https://opengameart.org/content/mages-rework
+- spritesheets: https://opengameart.org/content/bosses-and-monsters-spritesheets-ars-notoria
+- mountain background: https://opengameart.org/content/mountain-at-dusk-background
+- dungeon-door: https://opengameart.org/content/phantasy-dungeon-entrance

@@ -10,12 +10,27 @@
     --cellSize: 15px;
 }
 
+.heroes {
+    position: absolute;
+    border: 1px solid black;
+    top: -150px;
+    height: 150px;
+    width: 100%;
+    display: flex;
+    background: url(/images/parallax-mountain-bg.png);
+    background-size: contain;
+}
+
+.hero img {
+    height: 100%;
+}
+
 .board {
     position: absolute;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    top: 50%;
+    top: 60%;
     left: 50%;
     transform: translate(-50%, -50%);
     /* height: var(--board); */
