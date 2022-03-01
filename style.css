@@ -1,0 +1,51 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --board: 300px;
+    --borderFactor: 6;
+}
+
+.board {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* height: var(--board); */
+    width: 100%;
+}
+
+.floor {
+    background: url(/images/floor.png);
+    height: 300px;
+    display: flex;
+}
+
+.cell {
+    height: 20px;
+    width: 20px;
+    /* border: 1px solid blue; */
+}
+
+.fire {
+    /* animation name, forwards, duration. call with js function with settimeout for 1s each */
+}
+
+.border {
+    height: calc(var(--board) / var(--borderFactor));
+    background: url(/images/candle.gif); 
+    background-position: center; 
+    background-size: contain; 
+    background-color: gray;
+    /* background-color: brown; */
+}
+
+.boss {
+    
+}
