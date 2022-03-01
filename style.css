@@ -50,6 +50,7 @@ body {
 
 .door {
     position: relative;
+    /* padding-top: 10px; */
 }
 
 .door img {
@@ -107,21 +108,26 @@ body {
     position: absolute;
     top: 50%;
     opacity: 0;
-    right: 100px;
+    right: -100px;
     transform: translate(50%, -50%);
     width: 150px;
-    animation: 10s infinite hover;
+}
+
+.boss img {
+    width: 100%;
 }
 
 .enterBoss {
-    animation: 5s forwards enterBoss;
-    animation-delay: 3s;
+    animation-name: enterBoss, hover;
+    animation-duration: 5s, 10s;
+    animation-delay: 3s, 8s;
+    animation-iteration-count: 1, infinite;
 }
 
 @media screen and (max-width: 800px) {
     .boss {
-        right: 50px;
-        width: 75px;
+        /* right: 50px;
+        width: 75px; */
     }
     /* you can also lower the gameArea width and the cell size to maintain proportion */
 }
@@ -168,30 +174,36 @@ body {
     background-position: center; 
     background-size: contain; 
     background-color: gray;
-    /* background-color: brown; */
 }
 
 
 @keyframes hover {
     0% {
-        top: 60%;
+        opacity: 1;
+        top: 50%;
     }
-    50% {
+    33% {
+        opacity: 1;
         top: 40%;
     }
-    100% {
+    66% {
+        opacity: 1;
         top: 60%;
+    }
+    100% {
+        opacity: 1;
+        top: 50%;
     }
 }
 
 @keyframes enterBoss {
     0% {
         opacity: 0;
-        right: -250px;
+        right: -450px;
     }
     50% {
         opacity: 0.5;
-        right: 100px
+        right: -100px
     }
     100% {
         opacity: 1;

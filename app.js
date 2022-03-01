@@ -8,6 +8,9 @@ let gameState = {
     gameStatus: 'not playing',
     dialogueCounter: 0,
     playerName: 'SNEK',
+    getName: function() {
+        return this.playerName;
+    }
 }
 
 const dialogue = [
