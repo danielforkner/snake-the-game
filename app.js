@@ -11,14 +11,16 @@ let gameState = {
 }
 
 const dialogue = [
-    'There is a monster below',
-    'Only you can defeat it',
+    'There is a monster below!!',
+    'Only you can defeat it!',
     'Will you help?',
-    'Thank you great hero',
+    'Thank you, great hero!',
     'Who are you?',
     '<input type="textarea" placeholder="your name" id="nameInput" />',
-    `Thank you ${gameState.playerName}!`,
+    'That\'s a silly name for a snake',
+    'ADVANCE'
     ];
+
 const dialogueBtn = document.querySelector('.dialogueBtn');
 const textArea = document.querySelector('.text');
 
@@ -26,34 +28,45 @@ const startBtn = document.querySelector('button');
 const heroes = document.querySelector('.heroes');
 const gameArea = document.querySelector('.gameArea');
 const borders = document.querySelectorAll('.border');
+const columns = document.querySelectorAll('.column');
 const fires = document.querySelectorAll('.fire');
 const snake = document.querySelector('.snake');
+const boss = document.querySelector('.boss');
 const FIRE_DELAY = 150;
 const SNAKE_DELAY = 3000;
-const BOSS_DELAY = 3000;
+const BOSS_DELAY = 5000;
 const HEIGHT = 300; // height of gameArea in px
 const WIDTH = 600; // width of gameArea in px
 const CELL_SIZE = 15; // hw of cell in px
 
 // EVENT LISTENERS
 startBtn.addEventListener('click', () => {
-    createGameArea();
-    goDown();
-    enterSnake();
-    enterBoss();
-    setTimeout(() => {
-        makeFire();
-    }, SNAKE_DELAY + BOSS_DELAY);
+    startGame();
 })
 
 dialogueBtn.addEventListener('click', () => {
     if (document.getElementById('nameInput')) {
         gameState.playerName = document.getElementById('nameInput').value
     }
-    textArea.innerHTML = dialogue[gameState.dialogueCounter]
-    gameState.dialogueCounter++;
+    if (dialogue[gameState.dialogueCounter] === 'ADVANCE') {
+        gameState.dialogueCounter++;
+        startGame();
+    } else {
+        textArea.innerHTML = dialogue[gameState.dialogueCounter]
+        gameState.dialogueCounter++;
+    }
 })
 
+function startGame() {
+    gameState.gameStatus = 'playing';
+    createGameArea();
+    goDown();
+    enterSnake();
+    enterBoss();
+    setTimeout(() => {
+        makeFire();
+    }, BOSS_DELAY);
+}
 
 // create gamearea
 function createGameArea() {
@@ -81,6 +94,8 @@ function makeFire() {
     setTimeout(() => {
         borders[0].style.backgroundColor = 'brown';
         borders[1].style.backgroundColor = 'brown';
+        columns[0].style.borderRight = '1px solid brown';
+        columns[1].style.borderLeft = '1px solid brown';
     }, 20*FIRE_DELAY)
 }
 
@@ -93,5 +108,5 @@ function enterSnake() {
 }
 
 function enterBoss() {
-
+    boss.classList.add('enterBoss');
 }

@@ -10,6 +10,11 @@
     --cellSize: 15px;
 }
 
+body {
+    overflow: hidden;
+    width: 100%;
+}
+
 .heroes {
     position: absolute;
     top: -150px;
@@ -60,7 +65,6 @@
     background-color: blue;
     border: 1px solid white;
     padding: 10px;
-    margin: 5px;
     color: white;
     opacity: 0;
     animation: ease startDialogue forwards;
@@ -96,8 +100,34 @@
 
 .gameArea {
     position: relative;
-    border: 1px solid black;
     width: 600px;
+}
+
+.boss {
+    position: absolute;
+    top: 50%;
+    opacity: 0;
+    right: 100px;
+    transform: translate(50%, -50%);
+    width: 150px;
+    animation: 10s infinite hover;
+}
+
+.enterBoss {
+    animation: 5s forwards enterBoss;
+    animation-delay: 3s;
+}
+
+@media screen and (max-width: 800px) {
+    .boss {
+        right: 50px;
+        width: 75px;
+    }
+    /* you can also lower the gameArea width and the cell size to maintain proportion */
+}
+
+.boss img {
+    width: 100%;
 }
 
 .snake {
@@ -121,7 +151,7 @@
 .cell {
     height: 15px;
     width: 15px;
-    border: 1px solid blue;
+    /* border: 1px solid blue; */
 }
 
 .fire {
@@ -141,8 +171,31 @@
     /* background-color: brown; */
 }
 
-.boss {
-    
+
+@keyframes hover {
+    0% {
+        top: 60%;
+    }
+    50% {
+        top: 40%;
+    }
+    100% {
+        top: 60%;
+    }
+}
+
+@keyframes enterBoss {
+    0% {
+        opacity: 0;
+        right: -250px;
+    }
+    50% {
+        opacity: 0.5;
+        right: 100px
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 @keyframes startDialogue {
