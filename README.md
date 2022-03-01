@@ -8,3 +8,6 @@ Assets:
 - snake: https://opengameart.org/content/a-snake
 - skull boss: https://opengameart.org/content/bevouliin-horns-skull-sprite-sheets
 - orbs: https://opengameart.org/content/pixel-orbs
+
+
+- mage?: https://opengameart.org/content/mages-rework

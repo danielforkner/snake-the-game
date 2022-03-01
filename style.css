@@ -7,6 +7,7 @@
 :root {
     --board: 300px;
     --borderFactor: 6;
+    --cellSize: 15px;
 }
 
 .board {
@@ -36,8 +37,27 @@
 }
 
 .gameArea {
-    /* border: 1px solid red; */
+    position: relative;
+    border: 1px solid red;
     width: 600px;
+}
+
+.snake {
+    position: absolute;
+    top: 50%;
+    left: -1000px;
+    width: var(--cellSize);
+    height: var(--cellSize);
+}
+
+.snake img {
+    height: 100%;
+    width: 100%;
+}
+
+.slither {
+    animation: ease slither forwards;
+    animation-duration: 3s;
 }
 
 .cell {
@@ -65,4 +85,13 @@
 
 .boss {
     
+}
+
+@keyframes slither {
+    0% {
+        left: -1000px;
+    }
+    100% {
+        left: 0px;
+    }
 }
