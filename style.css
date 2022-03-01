@@ -25,16 +25,33 @@
     background: url(/images/floor.png);
     height: 300px;
     display: flex;
+    justify-content: center;
+}
+
+.column {
+    width: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.gameArea {
+    /* border: 1px solid red; */
+    width: 600px;
 }
 
 .cell {
-    height: 20px;
-    width: 20px;
-    /* border: 1px solid blue; */
+    height: 15px;
+    width: 15px;
+    border: 1px solid blue;
 }
 
 .fire {
-    /* animation name, forwards, duration. call with js function with settimeout for 1s each */
+    height: 30px;
+}
+.fire.on {
+    background: url(/images/fire.gif);
+    background-size: cover;
 }
 
 .border {
