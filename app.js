@@ -47,10 +47,26 @@ let player = {
     },
 }
 
-let boss1 = {
-    startHealth: 100,
-    health: 100,
-    hitAnimationSRC: '/images/boss1_hit.gif'
+// let boss1 = {
+//     startHealth: 100,
+//     health: 100,
+//     hitAnimationSRC: '/images/boss1_hit.gif'
+// }
+
+let bosses = {
+    boss1: {
+        startHealth: 100,
+        health: 100,
+        hitAnimationSRC: '/images/boss1_hit.gif',
+    },
+    boss2: {
+        startHealth: 1000,
+        health: 1000,
+        hitAnimationSRC: '/images/boss1_hit.gif',
+        spell: function() {
+
+        }
+    },
 }
 
 const dialogue = [
@@ -100,25 +116,51 @@ var dmg_muliplyer = 1;
 var tick_speed = 250;
 
 // THE ALMIGHTY TICK
-tick();
-
-function tick() {
-    setInterval(() => {
-        if (gameState.isPaused) {
-            return;
-        }
-        movePlayer(); // will call updateGameArea() and checkCollision()
-        gameState.weaponCounter--;
-        if (gameState.currentBoss === 'dead') {
-            nextLevel();
-        }
-    }, tick_speed);
+tick = {
+    startTick: function() {
+        setInterval(() => {
+            if (gameState.hasLost) {
+                gameState.hasLost = false;
+                youLose();
+                return;
+            }
+            
+            if (gameState.isPaused) {
+                return;
+            }
+            movePlayer(); // will call updateGameArea() and checkCollision()
+            gameState.weaponCounter--;
+            if (gameState.currentBoss === 'dead') {
+                nextLevel();
+            } if (gameState.currentBoss === 'all dead') {
+                youWin();
+            }
+        }, tick_speed);
+    },
+    startGame: function() {
+        gameState.gameStatus = 'playing';
+        goDown();
+        enterSnake();
+        enterBoss();
+        setTimeout(() => {
+            makeFire();
+        }, BOSS_DELAY);
+        setTimeout(() => {
+            togglePause();
+        }, BOSS_DELAY + ALL_FIRE_DELAY);
+        setTimeout(() => {
+            snake.remove();
+            placeApple();
+            gameState.isPaused = false;
+            this.startTick();
+        }, BOSS_DELAY + ALL_FIRE_DELAY + tick_speed)
+    }
 };
 
 // EVENT LISTENERS
 startBtn.addEventListener('click', () => {
     gameState.dialogueCounter = 7;
-    startGame();
+    tick.startGame()
 })
 
 dialogueBtn.addEventListener('click', () => {
@@ -127,7 +169,7 @@ dialogueBtn.addEventListener('click', () => {
     }
     if (dialogue[gameState.dialogueCounter] === 'ADVANCE') {
         gameState.dialogueCounter++;
-        startGame();
+        tick.startGame();
     } else {
         textArea.innerHTML = dialogue[gameState.dialogueCounter]
         gameState.dialogueCounter++;
@@ -164,24 +206,6 @@ function createGameArea() {
             row.append(cell)
         }
     }
-}
-
-function startGame() {
-    gameState.gameStatus = 'playing';
-    goDown();
-    enterSnake();
-    enterBoss();
-    setTimeout(() => {
-        makeFire();
-    }, BOSS_DELAY);
-    setTimeout(() => {
-        togglePause();
-    }, BOSS_DELAY + ALL_FIRE_DELAY);
-    setTimeout(() => {
-        snake.remove();
-        placeApple();
-        gameState.isPaused = false;
-    }, BOSS_DELAY + ALL_FIRE_DELAY + tick_speed)
 }
 
 function makeFire() {
@@ -414,12 +438,12 @@ function placeWeapon() {
 function damageBoss() {
     let baseDmg = player.getLength();
     let totalDmg = baseDmg * dmg_muliplyer;
-    boss1.health -= totalDmg;
-    if (boss1.health <= 0) {
+    bosses.boss1.health -= totalDmg;
+    if (bosses.boss1.health <= 0) {
         killBoss(); 
         return;
     }
-    let remaining = boss1.health / boss1.startHealth * 100;
+    let remaining = bosses.boss1.health / bosses.boss1.startHealth * 100;
     bossHealth.style.width = `${remaining}%`
 }
 
@@ -427,10 +451,10 @@ function animateHit() {
     let current = gameState.currentBoss;
     switch (current) {
         case 'boss1': 
-            hitAnimation.innerHTML = `<img src="${boss1.hitAnimationSRC}" class="hitAnimation" />`;
+            hitAnimation.innerHTML = `<img src="${bosses.boss1.hitAnimationSRC}" class="hitAnimation" />`;
             break;
         case 'boss2':
-            hitAnimation.innerHTML = `<img src="${boss2.hitAnimationSRC}" class="hitAnimation" />`;
+            hitAnimation.innerHTML = `<img src="${bosses.boss2.hitAnimationSRC}" class="hitAnimation" />`;
             break;
     }
 }
@@ -447,4 +471,12 @@ function killBoss() {
 
 function nextLevel() {
     // function...
+}
+
+function youWin() {
+    // function
+}
+
+function youLose() {
+
 }
