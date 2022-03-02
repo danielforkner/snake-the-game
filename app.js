@@ -1,3 +1,17 @@
+// TABLE OF CONTENTS
+// 1. objects and dialogue
+// 2. global variables
+// 3. tick
+// 4. event listeners
+// 5. create game initial state
+// 6. play logic
+// 7. boss logic
+
+// TO ADD: 
+// score go up based on damage done to bosses not apples collected
+// lose condition should trigger functon "YOU LOSE" with score displayed
+
+// OBJECTS AND DIALOGUE
 let gameState = {
     currentScore: 0,
     bossHealth: 100,
@@ -30,6 +44,10 @@ let player = {
     },
 }
 
+let boss1 = {
+    health: 100,
+}
+
 const dialogue = [
     'There is a monster below!!',
     'Only you can defeat it!',
@@ -41,14 +59,15 @@ const dialogue = [
     'Hello hero, I am the magician Neely',
     'By now you must know how monsters work',
     'They can be killed by energy',
-    'Collect purple orbs to release your energy',
+    'Collect blue orbs to store energy',
+    'Activate purple orbs to release energy',
     'The more energy you have, the more damage done',
     'Say, what\'s your name anyway?',
     `${player.getName}? What a silly name...`,
     'ADVANCE',
 ];
 
-// FIRST OF ALL
+// GLOBAL VARIABLES
 const HEIGHT = 300; // height of gameArea in px
 const WIDTH = 600; // width of gameArea in px
 const CELL_SIZE = 15; // hw of cell in px
@@ -121,6 +140,21 @@ window.addEventListener('keydown', (e) => {
     }
 })
 
+// CREATE GAME
+function createGameArea() {
+    let rows = HEIGHT / CELL_SIZE;
+    let columns = WIDTH / CELL_SIZE;
+    for (let i = 0; i < rows; i++) {
+        let row = document.createElement('tr')
+        gameArea.appendChild(row);
+        for (let j = 0; j < columns; j++) {
+            let cell = document.createElement('td');
+            cell.classList.add('cell')
+            row.append(cell)
+        }
+    }
+}
+
 function startGame() {
     gameState.gameStatus = 'playing';
     goDown();
@@ -137,21 +171,6 @@ function startGame() {
         placeApple();
         gameState.isPaused = false;
     }, BOSS_DELAY + ALL_FIRE_DELAY + tick_speed)
-}
-
-// CREATE GAMEAREA
-function createGameArea() {
-    let rows = HEIGHT / CELL_SIZE;
-    let columns = WIDTH / CELL_SIZE;
-    for (let i = 0; i < rows; i++) {
-        let row = document.createElement('tr')
-        gameArea.appendChild(row);
-        for (let j = 0; j < columns; j++) {
-            let cell = document.createElement('td');
-            cell.classList.add('cell')
-            row.append(cell)
-        }
-    }
 }
 
 function makeFire() {
@@ -345,3 +364,5 @@ function placeApple() {
     let cell = gameGrid[apple[0]].cells[apple[1]];
     cell.classList.toggle('apple');
 }
+
+// BOSS LOGIC
