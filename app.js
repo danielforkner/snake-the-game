@@ -97,7 +97,7 @@ const ALL_FIRE_DELAY = FIRE_DELAY * 20;
 const SNAKE_DELAY = 3000;
 const BOSS_DELAY = 5000;
 var dmg_muliplyer = 1;
-var tick_speed = 500;
+var tick_speed = 250;
 
 // THE ALMIGHTY TICK
 tick();
@@ -109,6 +109,9 @@ function tick() {
         }
         movePlayer(); // will call updateGameArea() and checkCollision()
         gameState.weaponCounter--;
+        if (gameState.currentBoss === 'dead') {
+            nextLevel();
+        }
     }, tick_speed);
 };
 
@@ -432,5 +435,16 @@ function animateHit() {
     }
 }
 
-// function killBoss() {
-// }
+function killBoss() {
+    boss.classList.add('bossDeath');
+    gameState.isPaused = true;
+    setTimeout(() => {
+        boss.classList.remove('bossDeath');
+        boss.classList.remove('enterBoss');
+        gameState.currentBoss = 'dead';
+    }, BOSS_DELAY)
+}
+
+function nextLevel() {
+    // function...
+}

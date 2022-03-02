@@ -160,6 +160,12 @@ body {
     animation: 2s fadeinandout forwards;
 }
 
+.bossDeath {
+    animation-name: fadeout;
+    animation-duration: .5s;
+    animation-iteration-count: infinite;
+}
+
 .snake {
     position: absolute;
     top: 50%;
@@ -227,6 +233,15 @@ body {
 }
 
 /* ANIMATIONS */
+@keyframes fadeout {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
 @keyframes hover {
     0% {
         opacity: 1;
