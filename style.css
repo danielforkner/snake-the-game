@@ -181,7 +181,14 @@ body {
     background-color: gray;
 }
 
+/* GAME PIECES */
+.apple {
+    background: url(/images/orb_purple.png);
+    background-position: center; 
+    background-size: contain; 
+}
 
+/* ANIMATIONS */
 @keyframes hover {
     0% {
         opacity: 1;

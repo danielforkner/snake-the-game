@@ -10,6 +10,7 @@ let gameState = {
     isPaused: true,
     hasLost: false,
     dialogueCounter: 0,
+    apple: [10, 5],
 }
 
 let player = {
@@ -21,7 +22,10 @@ let player = {
         return this.body.length;
     },
     getHead: function() {
-        return this.body[this.body.length - 1]
+        return this.body[this.getLength() - 1]
+    },
+    getNeck: function() {
+        return this.body[this.getLength() - 2]
     },
     getTail: function() {
         return this.body[0]
@@ -72,7 +76,7 @@ const FIRE_DELAY = 150;
 const ALL_FIRE_DELAY = 150 * 20;
 const SNAKE_DELAY = 3000;
 const BOSS_DELAY = 5000;
-const TICK_SPEED = 1000;
+const TICK_SPEED = 500;
 
 // THE ALMIGHTY TICK
 tick();
@@ -138,10 +142,11 @@ function startGame() {
     }, BOSS_DELAY + ALL_FIRE_DELAY);
     setTimeout(() => {
         snake.remove();
+        gameState.isPaused = false;
     }, BOSS_DELAY + ALL_FIRE_DELAY + TICK_SPEED)
 }
 
-// create gamearea
+// CREATE GAMEAREA
 function createGameArea() {
     let rows = HEIGHT / CELL_SIZE;
     let columns = WIDTH / CELL_SIZE;
@@ -198,8 +203,11 @@ function movePlayer() {
                 newHead = [headRow, headCol - 1]
             }; // if player tries to 180deg reverse, just continue straight
             player.body.push(newHead)
+            // if player ate the apple, do not shift tail
             if (!player.hasApple) {
                 shifted = player.body.shift();
+            } else {
+                player.hasApple = false;
             }
             break;
         case 'left':
@@ -208,7 +216,11 @@ function movePlayer() {
                 newHead = [headRow, headCol + 1]
             };
             player.body.push(newHead)
-            shifted = player.body.shift();
+            if (!player.hasApple) {
+                shifted = player.body.shift();
+            } else {
+                player.hasApple = false;
+            }
             break;
         case 'up':
             newHead = [headRow - 1, headCol];
@@ -216,7 +228,11 @@ function movePlayer() {
                 newHead = [headRow + 1, headCol]
             };
             player.body.push(newHead)
-            shifted = player.body.shift();
+            if (!player.hasApple) {
+                shifted = player.body.shift();
+            } else {
+                player.hasApple = false;
+            }
             break;
         case 'down':
             newHead = [headRow + 1, headCol]; 
@@ -224,7 +240,11 @@ function movePlayer() {
                 newHead = [headRow - 1, headCol]
             };
             player.body.push(newHead)
-            shifted = player.body.shift();
+            if (!player.hasApple) {
+                shifted = player.body.shift();
+            } else {
+                player.hasApple = false;
+            }
             break;
     }
     
@@ -235,6 +255,7 @@ function movePlayer() {
 
 function checkCollision() {
     let head = player.getHead();
+    let currentCell = gameGrid[head[0]].cells[head[1]];
     // check walls
     if (head[0] >= 20 || head[0] < 0 || head[1] >= 40 || head[1] < 0) {
         gameState.isPaused = true;
@@ -252,8 +273,11 @@ function checkCollision() {
         }
     }
 
-    // check other
-
+    // check apple
+    if (currentCell.classList.contains('apple')) {
+        player.hasApple = true;
+        currentCell.classList.toggle('apple');
+    }
     return false;
 }
 
@@ -278,7 +302,7 @@ function updateGameArea(newHead, oldHead, lostTail) {
     add.classList.toggle('head');
 
     // switch oldHead to body
-    if (player.body.length !== 1) {
+    if (player.getNeck()) {
     change.classList.toggle('head');
     change.classList.toggle('body');
     }
@@ -288,6 +312,14 @@ function updateGameArea(newHead, oldHead, lostTail) {
         remove.classList.toggle('head');
     } else if (remove.classList.contains('body')) {
         remove.classList.toggle('body');
+    }
+
+    // place apple
+    if (gameState.apple) {
+        let apple = gameState.apple;
+        let cell = gameGrid[apple[0]].cells[apple[1]];
+        cell.classList.toggle('apple');
+        gameState.apple = undefined;
     }
 }
 
