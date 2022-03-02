@@ -117,7 +117,7 @@ const ALL_FIRE_DELAY = FIRE_DELAY * 20;
 const SNAKE_DELAY = 3000;
 const BOSS_DELAY = 5000;
 var dmg_muliplyer = 1;
-var tick_speed = 250;
+var tick_speed = 150;
 
 // THE ALMIGHTY TICK
 tick = {
