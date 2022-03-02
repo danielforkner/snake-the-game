@@ -19,7 +19,10 @@ let gameState = {
     isPaused: true,
     hasLost: false,
     dialogueCounter: 0,
+    currentBoss: 'boss1',
     apple: [10, 5],
+    weapon: undefined,
+    weaponCounter: 30,
 }
 
 let player = {
@@ -100,7 +103,7 @@ function tick() {
             return;
         }
         movePlayer(); // will call updateGameArea() and checkCollision()
-
+        gameState.weaponCounter--;
     }, tick_speed);
 };
 
@@ -289,6 +292,10 @@ function checkCollision() {
         player.hasApple = true;
         currentCell.classList.toggle('apple');
     }
+    // check weapon
+    if (currentCell.classList.contains('weapon')) {
+        currentCell.classList.toggle('weapon');
+    }
     return false;
 }
 
@@ -325,11 +332,15 @@ function updateGameArea(newHead, oldHead, lostTail) {
     change.classList.toggle('body');
     }
 
-
     // place new apple if player has eaten
     if (player.hasApple) {
         createApple();
         placeApple();
+    }
+    // place weapon
+    if (gameState.weaponCounter === 0) {
+        createWeapon();
+        placeWeapon();
     }
 }
 
@@ -363,6 +374,30 @@ function placeApple() {
     let apple = gameState.apple;
     let cell = gameGrid[apple[0]].cells[apple[1]];
     cell.classList.toggle('apple');
+}
+
+function createWeapon() {
+    // random numbers between 0-20 and 0-40
+    let collision = true;
+    while (collision) {
+        let row = Math.floor(Math.random() * 20)
+        let col = Math.floor(Math.random() * 40)
+        for (let i = 0; i < player.getLength(); i++) {
+            if (player.body[i][0] === row && player.body[i][1] === col) {
+                collision = true;
+                break;
+            }
+        }
+        collision = false;
+        gameState.weapon = [row, col];
+    }
+}
+
+function placeWeapon() {
+    let weapon = gameState.weapon;
+    let cell = gameGrid[weapon[0]].cells[weapon[1]];
+    cell.classList.toggle('weapon');
+    gameState.weaponCounter = 30;
 }
 
 // BOSS LOGIC

@@ -203,6 +203,12 @@ body {
     background-size: contain; 
 }
 
+.weapon {
+    background: url(/images/orb_red.png);
+    background-position: center; 
+    background-size: contain;
+}
+
 /* ANIMATIONS */
 @keyframes hover {
     0% {
