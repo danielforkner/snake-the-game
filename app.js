@@ -8,6 +8,7 @@ let gameState = {
     bossHealth: 100,
     gameStatus: 'not playing',
     isPaused: true,
+    hasLost: false,
     dialogueCounter: 0,
 }
 
@@ -15,6 +16,10 @@ let player = {
     name: 'Snek',
     body: [[10, 0]],
     direction: 'right',
+    hasApple: false,
+    getLength: function() {
+        return this.body.length;
+    },
     getHead: function() {
         return this.body[this.body.length - 1]
     },
@@ -86,6 +91,7 @@ function tick() {
 
 // EVENT LISTENERS
 startBtn.addEventListener('click', () => {
+    gameState.dialogueCounter = 8;
     startGame();
 })
 
@@ -161,8 +167,8 @@ function makeFire() {
     setTimeout(() => {
         borders[0].style.backgroundColor = 'brown';
         borders[1].style.backgroundColor = 'brown';
-        columns[0].style.borderRight = '1px solid brown';
-        columns[1].style.borderLeft = '1px solid brown';
+        columns[0].style.borderRight = '12px solid brown';
+        columns[1].style.borderLeft = '12px solid brown';
     }, 20*FIRE_DELAY)
 }
 
@@ -181,40 +187,92 @@ function enterBoss() {
 // PLAY LOGIC
 function movePlayer() {
     let oldHead = player.getHead(); 
+    let neck = player.body[player.getLength() - 2];
     let headRow = oldHead[0];
     let headCol = oldHead[1];
     let newHead, shifted = [];
     switch (player.direction) {
         case 'right':
             newHead = [headRow, headCol + 1]; 
+            if (isReverse(newHead, neck)) {
+                newHead = [headRow, headCol - 1]
+            }; // if player tries to 180deg reverse, just continue straight
             player.body.push(newHead)
-            shifted = player.body.shift();
+            if (!player.hasApple) {
+                shifted = player.body.shift();
+            }
             break;
         case 'left':
             newHead = [headRow, headCol - 1]; 
+            if (isReverse(newHead, neck)) {
+                newHead = [headRow, headCol + 1]
+            };
             player.body.push(newHead)
             shifted = player.body.shift();
             break;
         case 'up':
-            newHead = [headRow - 1, headCol]; 
+            newHead = [headRow - 1, headCol];
+            if (isReverse(newHead, neck)) {
+                newHead = [headRow + 1, headCol]
+            };
             player.body.push(newHead)
             shifted = player.body.shift();
             break;
         case 'down':
             newHead = [headRow + 1, headCol]; 
+            if (isReverse(newHead, neck)) {
+                newHead = [headRow - 1, headCol]
+            };
             player.body.push(newHead)
             shifted = player.body.shift();
             break;
     }
     
+    if (checkCollision()) {return};
     updateGameArea(newHead, oldHead, shifted);
     return;
 }
 
+function checkCollision() {
+    let head = player.getHead();
+    // check walls
+    if (head[0] >= 20 || head[0] < 0 || head[1] >= 40 || head[1] < 0) {
+        gameState.isPaused = true;
+        gameState.hasLost = true;
+        return true;
+    }
+
+    // check body
+    for (let i = 0; i < player.getLength() - 1; i++) {
+        if (head[0] === player.body[i][0] && head[1] === player.body[i][1]) {
+        gameState.isPaused = true;
+        gameState.hasLost = true;
+        gameState.gameStatus = 'not playing';
+        return true;
+        }
+    }
+
+    // check other
+
+    return false;
+}
+
+function isReverse(newHead, neck) {
+    if (!neck) {
+        return false;
+    }
+    if (newHead[0] === neck[0] && newHead[1] === neck[1]) {
+        return true;
+    } return false;
+}
+
 function updateGameArea(newHead, oldHead, lostTail) {
     let add = gameGrid[newHead[0]].cells[newHead[1]]
-    let remove = gameGrid[lostTail[0]].cells[lostTail[1]];
     let change = gameGrid[oldHead[0]].cells[oldHead[1]];
+    let remove;
+    if (lostTail) {
+        remove = gameGrid[lostTail[0]].cells[lostTail[1]];
+    }
     
     // add newHead
     add.classList.toggle('head');
@@ -225,13 +283,12 @@ function updateGameArea(newHead, oldHead, lostTail) {
     change.classList.toggle('body');
     }
 
-    // remove tail
+    // remove tail - if snake has not eaten
     if (remove.classList.contains('head')) {
         remove.classList.toggle('head');
     } else if (remove.classList.contains('body')) {
         remove.classList.toggle('body');
     }
-    
 }
 
 function togglePause() {
