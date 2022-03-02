@@ -1,8 +1,3 @@
-
-let elements = {
-    
-}
-
 let gameState = {
     currentScore: 0,
     bossHealth: 100,
@@ -39,8 +34,7 @@ const dialogue = [
     'There is a monster below!!',
     'Only you can defeat it!',
     'Will you help?',
-    'Thank you, great hero!',
-    'Who are you?',
+    'Thank you! What\'s your name hero?',
     '<input type="textarea" placeholder="your name" id="nameInput" />',
     'That\'s a silly name for a snake',
     'ADVANCE',
@@ -86,16 +80,14 @@ function tick() {
         if (gameState.isPaused) {
             return;
         }
-        movePlayer(); // will call updateGameArea()
-        // checkCollision();
-
+        movePlayer(); // will call updateGameArea() and checkCollision()
 
     }, tick_speed);
 };
 
 // EVENT LISTENERS
 startBtn.addEventListener('click', () => {
-    gameState.dialogueCounter = 8;
+    gameState.dialogueCounter = 7;
     startGame();
 })
 
@@ -142,6 +134,7 @@ function startGame() {
     }, BOSS_DELAY + ALL_FIRE_DELAY);
     setTimeout(() => {
         snake.remove();
+        placeApple();
         gameState.isPaused = false;
     }, BOSS_DELAY + ALL_FIRE_DELAY + tick_speed)
 }
@@ -150,7 +143,6 @@ function startGame() {
 function createGameArea() {
     let rows = HEIGHT / CELL_SIZE;
     let columns = WIDTH / CELL_SIZE;
-    
     for (let i = 0; i < rows; i++) {
         let row = document.createElement('tr')
         gameArea.appendChild(row);
@@ -296,6 +288,12 @@ function updateGameArea(newHead, oldHead, lostTail) {
     let remove;
     if (lostTail.length === 2) { // source of apple bug (3/2/22). lostTail was not undefined, it was '[]', causing break out of function
         remove = gameGrid[lostTail[0]].cells[lostTail[1]];
+        // remove tail - if snake has not eaten
+        if (remove.classList.contains('head')) {
+            remove.classList.toggle('head');
+        } if (remove.classList.contains('body')) {
+            remove.classList.toggle('body');
+        }
     }
     
     // add newHead
@@ -308,19 +306,11 @@ function updateGameArea(newHead, oldHead, lostTail) {
     change.classList.toggle('body');
     }
 
-    // remove tail - if snake has not eaten
-    if (remove.classList.contains('head')) {
-        remove.classList.toggle('head');
-    } if (remove.classList.contains('body')) {
-        remove.classList.toggle('body');
-    }
 
-    // place apple
-    if (gameState.apple) {
-        let apple = gameState.apple;
-        let cell = gameGrid[apple[0]].cells[apple[1]];
-        cell.classList.toggle('apple');
-        gameState.apple = undefined;
+    // place new apple if player has eaten
+    if (player.hasApple) {
+        createApple();
+        placeApple();
     }
 }
 
@@ -331,4 +321,27 @@ function togglePause() {
     }
     gameState.isPaused = true;
     return;
+}
+
+function createApple() {
+    // random numbers between 0-20 and 0-40
+    let collision = true;
+    while (collision) {
+        let row = Math.floor(Math.random() * 20)
+        let col = Math.floor(Math.random() * 40)
+        for (let i = 0; i < player.getLength(); i++) {
+            if (player.body[i][0] === row && player.body[i][1] === col) {
+                collision = true;
+                break;
+            }
+        }
+        collision = false;
+        gameState.apple = [row, col];
+    }
+}
+
+function placeApple() {
+    let apple = gameState.apple;
+    let cell = gameGrid[apple[0]].cells[apple[1]];
+    cell.classList.toggle('apple');
 }
