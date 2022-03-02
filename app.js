@@ -18,6 +18,8 @@ let gameState = {
     gameStatus: 'not playing',
     isPaused: true,
     hasLost: false,
+    score: 0,
+    level: 1,
     dialogueCounter: 0,
     currentBoss: 'boss1',
     apple: [10, 5],
@@ -98,7 +100,7 @@ createGameArea(); // NOTE: this is a 20row by 40column board!!
 const dialogueBtn = document.querySelector('.dialogueBtn');
 const textArea = document.querySelector('.text');
 
-const startBtn = document.querySelector('button');
+const startBtn = document.querySelector('.skip');
 const heroes = document.querySelector('.heroes');
 const gameGrid = document.querySelectorAll('tr');
 const borders = document.querySelectorAll('.border');
@@ -108,6 +110,8 @@ const snake = document.querySelector('.snake');
 const boss = document.querySelector('.boss');
 const bossHealth = document.querySelector('.bar');
 const hitAnimation = document.querySelector('.hitAnimation');
+const loseContainer = document.querySelector('.loseContainer');
+const loseText = document.querySelector('.loseText');
 const FIRE_DELAY = 30;
 const ALL_FIRE_DELAY = FIRE_DELAY * 20;
 const SNAKE_DELAY = 3000;
@@ -160,7 +164,8 @@ tick = {
 // EVENT LISTENERS
 startBtn.addEventListener('click', () => {
     gameState.dialogueCounter = 7;
-    tick.startGame()
+    startBtn.remove();
+    tick.startGame();
 })
 
 dialogueBtn.addEventListener('click', () => {
@@ -438,6 +443,7 @@ function placeWeapon() {
 function damageBoss() {
     let baseDmg = player.getLength();
     let totalDmg = baseDmg * dmg_muliplyer;
+    gameState.score += totalDmg;
     bosses.boss1.health -= totalDmg;
     if (bosses.boss1.health <= 0) {
         killBoss(); 
@@ -478,5 +484,7 @@ function youWin() {
 }
 
 function youLose() {
-
+    let score = document.querySelector('.loseScore');
+    score.innerText = `${gameState.score} total damage dealt`;
+    loseText.classList.add('youLose');
 }
