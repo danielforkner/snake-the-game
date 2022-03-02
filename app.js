@@ -48,7 +48,9 @@ let player = {
 }
 
 let boss1 = {
+    startHealth: 100,
     health: 100,
+    hitAnimationSRC: '/images/boss1_hit.gif'
 }
 
 const dialogue = [
@@ -88,10 +90,13 @@ const columns = document.querySelectorAll('.column');
 const fires = document.querySelectorAll('.fire');
 const snake = document.querySelector('.snake');
 const boss = document.querySelector('.boss');
+const bossHealth = document.querySelector('.bar');
+const hitAnimation = document.querySelector('.hitAnimation');
 const FIRE_DELAY = 30;
 const ALL_FIRE_DELAY = FIRE_DELAY * 20;
 const SNAKE_DELAY = 3000;
 const BOSS_DELAY = 5000;
+var dmg_muliplyer = 1;
 var tick_speed = 500;
 
 // THE ALMIGHTY TICK
@@ -295,6 +300,8 @@ function checkCollision() {
     // check weapon
     if (currentCell.classList.contains('weapon')) {
         currentCell.classList.toggle('weapon');
+        damageBoss();
+        animateHit();
     }
     return false;
 }
@@ -401,3 +408,29 @@ function placeWeapon() {
 }
 
 // BOSS LOGIC
+function damageBoss() {
+    let baseDmg = player.getLength();
+    let totalDmg = baseDmg * dmg_muliplyer;
+    boss1.health -= totalDmg;
+    if (boss1.health <= 0) {
+        killBoss(); 
+        return;
+    }
+    let remaining = boss1.health / boss1.startHealth * 100;
+    bossHealth.style.width = `${remaining}%`
+}
+
+function animateHit() {
+    let current = gameState.currentBoss;
+    switch (current) {
+        case 'boss1': 
+            hitAnimation.innerHTML = `<img src="${boss1.hitAnimationSRC}" class="hitAnimation" />`;
+            break;
+        case 'boss2':
+            hitAnimation.innerHTML = `<img src="${boss2.hitAnimationSRC}" class="hitAnimation" />`;
+            break;
+    }
+}
+
+// function killBoss() {
+// }

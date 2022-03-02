@@ -14,3 +14,5 @@ Assets:
 - spritesheets: https://opengameart.org/content/bosses-and-monsters-spritesheets-ars-notoria
 - mountain background: https://opengameart.org/content/mountain-at-dusk-background
 - dungeon-door: https://opengameart.org/content/phantasy-dungeon-entrance
+- weapon and potions: https://opengameart.org/content/roguelikerpg-items
+- fireball: https://opengameart.org/content/fireball-flying-through-the-air
