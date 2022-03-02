@@ -1,4 +1,4 @@
-// TABLE OF CONTENTS
+// TABLE OF CONTENTS (not current)
 // 1. objects and dialogue
 // 2. global variables
 // 3. tick
@@ -306,25 +306,25 @@ function movePlayer() {
 
 function checkCollision() {
     let head = player.getHead();
-    let currentCell = gameGrid[head[0]].cells[head[1]];
     // check walls
     if (head[0] >= 20 || head[0] < 0 || head[1] >= 40 || head[1] < 0) {
         gameState.isPaused = true;
         gameState.hasLost = true;
         return true;
     }
-
+    
     // check body
     for (let i = 0; i < player.getLength() - 1; i++) {
         if (head[0] === player.body[i][0] && head[1] === player.body[i][1]) {
-        gameState.isPaused = true;
-        gameState.hasLost = true;
-        gameState.gameStatus = 'not playing';
-        return true;
+            gameState.isPaused = true;
+            gameState.hasLost = true;
+            gameState.gameStatus = 'not playing';
+            return true;
         }
     }
-
+    
     // check apple
+    let currentCell = gameGrid[head[0]].cells[head[1]];
     if (currentCell.classList.contains('apple')) {
         player.hasApple = true;
         currentCell.classList.toggle('apple');
@@ -485,6 +485,6 @@ function youWin() {
 
 function youLose() {
     let score = document.querySelector('.loseScore');
-    score.innerText = `${gameState.score} total damage dealt`;
+    score.innerText = `${gameState.score} damage dealt`;
     loseText.classList.add('youLose');
 }
