@@ -72,11 +72,11 @@ const columns = document.querySelectorAll('.column');
 const fires = document.querySelectorAll('.fire');
 const snake = document.querySelector('.snake');
 const boss = document.querySelector('.boss');
-const FIRE_DELAY = 150;
-const ALL_FIRE_DELAY = 150 * 20;
+const FIRE_DELAY = 30;
+const ALL_FIRE_DELAY = FIRE_DELAY * 20;
 const SNAKE_DELAY = 3000;
 const BOSS_DELAY = 5000;
-const TICK_SPEED = 500;
+var tick_speed = 500;
 
 // THE ALMIGHTY TICK
 tick();
@@ -90,7 +90,7 @@ function tick() {
         // checkCollision();
 
 
-    }, TICK_SPEED);
+    }, tick_speed);
 };
 
 // EVENT LISTENERS
@@ -143,7 +143,7 @@ function startGame() {
     setTimeout(() => {
         snake.remove();
         gameState.isPaused = false;
-    }, BOSS_DELAY + ALL_FIRE_DELAY + TICK_SPEED)
+    }, BOSS_DELAY + ALL_FIRE_DELAY + tick_speed)
 }
 
 // CREATE GAMEAREA
@@ -192,15 +192,15 @@ function enterBoss() {
 // PLAY LOGIC
 function movePlayer() {
     let oldHead = player.getHead(); 
-    let neck = player.body[player.getLength() - 2];
-    let headRow = oldHead[0];
-    let headCol = oldHead[1];
+    let neck = player.body[player.getLength() - 2]; // undefined for a snake with no body
+    let oldRow = oldHead[0];
+    let oldCol = oldHead[1];
     let newHead, shifted = [];
     switch (player.direction) {
         case 'right':
-            newHead = [headRow, headCol + 1]; 
+            newHead = [oldRow, oldCol + 1]; 
             if (isReverse(newHead, neck)) {
-                newHead = [headRow, headCol - 1]
+                newHead = [oldRow, oldCol - 1]
             }; // if player tries to 180deg reverse, just continue straight
             player.body.push(newHead)
             // if player ate the apple, do not shift tail
@@ -211,9 +211,9 @@ function movePlayer() {
             }
             break;
         case 'left':
-            newHead = [headRow, headCol - 1]; 
+            newHead = [oldRow, oldCol - 1]; 
             if (isReverse(newHead, neck)) {
-                newHead = [headRow, headCol + 1]
+                newHead = [oldRow, oldCol + 1]
             };
             player.body.push(newHead)
             if (!player.hasApple) {
@@ -223,9 +223,9 @@ function movePlayer() {
             }
             break;
         case 'up':
-            newHead = [headRow - 1, headCol];
+            newHead = [oldRow - 1, oldCol];
             if (isReverse(newHead, neck)) {
-                newHead = [headRow + 1, headCol]
+                newHead = [oldRow + 1, oldCol]
             };
             player.body.push(newHead)
             if (!player.hasApple) {
@@ -235,9 +235,9 @@ function movePlayer() {
             }
             break;
         case 'down':
-            newHead = [headRow + 1, headCol]; 
+            newHead = [oldRow + 1, oldCol]; 
             if (isReverse(newHead, neck)) {
-                newHead = [headRow - 1, headCol]
+                newHead = [oldRow - 1, oldCol]
             };
             player.body.push(newHead)
             if (!player.hasApple) {
@@ -294,7 +294,7 @@ function updateGameArea(newHead, oldHead, lostTail) {
     let add = gameGrid[newHead[0]].cells[newHead[1]]
     let change = gameGrid[oldHead[0]].cells[oldHead[1]];
     let remove;
-    if (lostTail) {
+    if (lostTail.length === 2) { // source of apple bug (3/2/22). lostTail was not undefined, it was '[]', causing break out of function
         remove = gameGrid[lostTail[0]].cells[lostTail[1]];
     }
     
@@ -302,7 +302,8 @@ function updateGameArea(newHead, oldHead, lostTail) {
     add.classList.toggle('head');
 
     // switch oldHead to body
-    if (player.getNeck()) {
+    // but only for a snake that is at least 3 parts
+    if (player.getNeck()) { 
     change.classList.toggle('head');
     change.classList.toggle('body');
     }
@@ -310,7 +311,7 @@ function updateGameArea(newHead, oldHead, lostTail) {
     // remove tail - if snake has not eaten
     if (remove.classList.contains('head')) {
         remove.classList.toggle('head');
-    } else if (remove.classList.contains('body')) {
+    } if (remove.classList.contains('body')) {
         remove.classList.toggle('body');
     }
 

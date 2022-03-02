@@ -149,7 +149,7 @@ body {
 .cell {
     height: 15px;
     width: 15px;
-    transition: 1s ease;
+    /* transition: 1s ease; */
     /* border: 1px solid blue; */
 }
 
