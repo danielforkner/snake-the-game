@@ -18,6 +18,7 @@
 body {
     overflow: hidden;
     width: 100%;
+    background-color: #866286;
 }
 
 .heroes {
@@ -37,20 +38,25 @@ body {
     animation-duration: 5s;
 }
 
-.hero.left {
+.hero.left, .hero.right {
     position: relative;
+    width: 150px;
+}
+
+.hero.left {
     animation: ease enterLeft forwards;
     animation-duration: 5s;
 }
 
 .hero.right {
-    position: relative;
     animation: ease enterRight forwards;
     animation-duration: 5s;
 }
 
 .hero img {
     height: 100%;
+    width: 100%;
+    object-fit: contain;
 }
 
 .door {
@@ -60,6 +66,8 @@ body {
 
 .door img {
     height: 100%;
+    width: 100%;
+    object-fit: cover;
 }
 
 .dialogue {
@@ -201,6 +209,9 @@ body {
 }
 
 .bossDeath {
+    background: url(images/fire.gif);
+    background-position: center;
+    background-size: cover;
     animation-name: fadeout;
     animation-duration: .5s;
     animation-iteration-count: infinite;

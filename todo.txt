@@ -1,0 +1,7 @@
+make tick.resetGame() function so that 
+    - dialogue characters come back up (add .goUp css class)
+    - boss change
+    - gameState reset
+
+use tick.resetGame() to call the initial dialogue 
+section when page is loaded for first time

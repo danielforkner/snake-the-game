@@ -154,6 +154,7 @@ tick = {
         }, BOSS_DELAY + ALL_FIRE_DELAY);
         setTimeout(() => {
             snake.remove();
+            gameGrid[10].cells[0].classList.add('head');
             placeApple();
             gameState.isPaused = false;
             this.startTick();
@@ -183,16 +184,20 @@ dialogueBtn.addEventListener('click', () => {
 
 window.addEventListener('keydown', (e) => {
     switch (e.key) {
-        case ('s' || 'ArrowDown'):
+        case 'ArrowDown':
+        case 's':
             player.direction = 'down';
             break;
-        case ('w' || 'ArrowUp'):
+        case 'w': 
+        case 'ArrowUp':
             player.direction = 'up';
             break;
-        case ('a' || 'ArrowLeft'):
+        case 'a':
+        case 'ArrowLeft':
             player.direction = 'left';
             break;
-        case ('d' || 'ArrowRight'):
+        case 'd':
+        case 'ArrowRight':
             player.direction = 'right';
             break;
     }
@@ -446,7 +451,7 @@ function damageBoss() {
     gameState.score += totalDmg;
     bosses.boss1.health -= totalDmg;
     if (bosses.boss1.health <= 0) {
-        killBoss(); 
+        killBoss(BOSS_DELAY); 
         return;
     }
     let remaining = bosses.boss1.health / bosses.boss1.startHealth * 100;
@@ -465,14 +470,15 @@ function animateHit() {
     }
 }
 
-function killBoss() {
+function killBoss(timing) {
     boss.classList.add('bossDeath');
+    boss.classList.remove('enterBoss');
     gameState.isPaused = true;
     setTimeout(() => {
         boss.classList.remove('bossDeath');
         boss.classList.remove('enterBoss');
         gameState.currentBoss = 'dead';
-    }, BOSS_DELAY)
+    }, timing)
 }
 
 function nextLevel() {
