@@ -13,7 +13,7 @@
 
 // OBJECTS AND DIALOGUE
 let gameState = {
-    currentScore: 0,
+    currentBoss: 1,
     bossHealth: 100,
     gameStatus: 'not playing',
     isPaused: true,
@@ -21,7 +21,6 @@ let gameState = {
     score: 0,
     level: 1,
     dialogueCounter: 0,
-    currentBoss: 'boss1',
     apple: [10, 5],
     weapon: undefined,
     weaponCounter: 30,
@@ -49,25 +48,28 @@ let player = {
     },
 }
 
-// let boss1 = {
-//     startHealth: 100,
-//     health: 100,
-//     hitAnimationSRC: '/images/boss1_hit.gif'
-// }
-
-let bosses = {
+let characters = {
     boss1: {
         startHealth: 100,
         health: 100,
+        src: '/images/boss1.gif',
         hitAnimationSRC: '/images/boss1_hit.gif',
     },
     boss2: {
         startHealth: 1000,
         health: 1000,
         hitAnimationSRC: '/images/boss1_hit.gif',
+        src: '/images/boss1.gif',
         spell: function() {
 
         }
+    },
+    friend1: {
+        src: '/images/friend1.png',
+    },
+    friend2: {
+        src: '/images/friend2.png',
+        leave: '/images/friend2.gif',
     },
 }
 
@@ -79,14 +81,18 @@ const dialogue = [
     '<input type="textarea" placeholder="your name" id="nameInput" />',
     'That\'s a silly name for a snake',
     'ADVANCE',
-    'Hello hero, I am the magician Neely',
+    'Wow you really did a number on that boss',
+    'Hello, I am the magician Neely',
     'By now you must know how monsters work',
     'They can be killed by energy',
-    'Collect blue orbs to store energy',
-    'Activate purple orbs to release energy',
-    'The more energy you have, the more damage done',
+    'Collect energy to store it',
+    'Use magic staffs to release energy',
+    'The more energy you have, the more damage dealt',
     'Say, what\'s your name anyway?',
     `${player.getName}? What a silly name...`,
+    'Well, I really must be going...',
+    'NEELY GOES AWAY',
+    '...',
     'ADVANCE',
 ];
 
@@ -147,7 +153,7 @@ tick = {
             }
         }, tick_speed);
     },
-    startGame: function() {
+    startLevel: function() {
         gameState.gameStatus = 'playing';
         toggleDialogue();
         enterSnake();
@@ -190,7 +196,14 @@ dialogueBtn.addEventListener('click', () => {
     }
     if (dialogue[gameState.dialogueCounter] === 'ADVANCE') {
         gameState.dialogueCounter++;
-        tick.startGame();
+        tick.startLevel();
+        setTimeout(() => {
+            textArea.innerHTML = dialogue[gameState.dialogueCounter];
+        }, 3000);
+    } else if (dialogue[gameState.dialogueCounter] === 'NEELY GOES AWAY') {
+        let neely = document.getElementById('friendImg');
+        neely.src = characters.friend2.leave;
+        gameState.dialogueCounter++;
     } else {
         textArea.innerHTML = dialogue[gameState.dialogueCounter]
         gameState.dialogueCounter++;
@@ -265,6 +278,15 @@ function toggleFire(timing) {
 
 function toggleDialogue() {
     if (dialogueArea.classList.contains('down') || dialogueArea.classList.contains('goDown')) {
+        let img = document.getElementById('friendImg');
+        switch (gameState.level) {
+            case 1: 
+                img.src = characters.friend1.src;
+                break;
+            case 2: 
+                img.src = characters.friend2.src;
+                break;
+        }
         dialogueArea.classList.remove('goDown');
         dialogueArea.classList.remove('down');
         dialogueArea.classList.add('goUp');
@@ -288,6 +310,16 @@ function enterSnake() {
 }
 
 function enterBoss() {
+    let img = document.getElementById('bossImg');
+    switch (gameState.currentBoss) {
+        case 1: 
+            img.src = characters.boss1.src;
+            break;
+        case 2: 
+            img.src = characters.boss2.src;
+            break;
+    }
+
     boss.classList.add('enterBoss');
 }
 
@@ -495,12 +527,12 @@ function damageBoss() {
     let baseDmg = player.getLength();
     let totalDmg = baseDmg * dmg_muliplyer;
     gameState.score += totalDmg;
-    bosses.boss1.health -= totalDmg;
-    if (bosses.boss1.health <= 0) {
+    characters.boss1.health -= totalDmg;
+    if (characters.boss1.health <= 0) {
         killBoss(BOSS_DELAY); 
         return;
     }
-    let remaining = bosses.boss1.health / bosses.boss1.startHealth * 100;
+    let remaining = characters.boss1.health / characters.boss1.startHealth * 100;
     bossHealth.style.width = `${remaining}%`
 }
 
@@ -508,16 +540,18 @@ function animateHit() {
     let current = gameState.currentBoss;
     switch (current) {
         case 'boss1': 
-            hitAnimation.innerHTML = `<img src="${bosses.boss1.hitAnimationSRC}" class="hitAnimation" />`;
+            hitAnimation.innerHTML = `<img src="${characters.boss1.hitAnimationSRC}" class="hitAnimation" />`;
             break;
         case 'boss2':
-            hitAnimation.innerHTML = `<img src="${bosses.boss2.hitAnimationSRC}" class="hitAnimation" />`;
+            hitAnimation.innerHTML = `<img src="${characters.boss2.hitAnimationSRC}" class="hitAnimation" />`;
             break;
     }
 }
 
 function killBoss(timing) {
     gameState.isPaused = true;
+    gameState.level++;
+    gameState.boss++;
     boss.classList.add('bossDeath');
     boss.classList.remove('enterBoss');
     tick.resetBoard();
@@ -532,12 +566,9 @@ function wipeBoard() {
     for (let i = 0; i < ROWS; i++) {
         for (let j = 0; j < COLS; j++) {
             gameGrid[i].cells[j].className = 'cell';
+            player.body = [10, 0];
         }
     }
-}
-
-function nextLevel() {
-    // function...
 }
 
 function youWin() {

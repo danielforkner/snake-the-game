@@ -33,6 +33,11 @@ body {
     z-index: -1;
 }
 
+.dialogueBtn {
+    width: 30px;
+    height: 20px;
+}
+
 .down {
     top: 100px;
 }
