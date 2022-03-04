@@ -5,13 +5,13 @@ Tech:
 - https://gifmaker.me/
 - https://pixlr.com/
 
-Assets:
+Assets thanks to:
 - candle: https://opengameart.org/content/candle
 - floor: https://opengameart.org/content/tileable-brick-ground-textures-set-2-brick03png
 - fire: https://opengameart.org/content/fire-0
 - snake: https://opengameart.org/content/a-snake
 - orbs: https://opengameart.org/content/pixel-orbs
-- spritesheets: https://opengameart.org/content/bosses-and-monsters-spritesheets-ars-notoria
+- boss and character sprites: Stephen Challener (Redshrike) https://opengameart.org/content/bosses-and-monsters-spritesheets-ars-notoria
 - mountain background: https://opengameart.org/content/mountain-at-dusk-background
 - dungeon-door: https://opengameart.org/content/phantasy-dungeon-entrance
 - weapon and potions: https://opengameart.org/content/roguelikerpg-items

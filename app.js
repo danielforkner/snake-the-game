@@ -15,7 +15,6 @@
 let gameState = {
     currentBoss: 1,
     bossHealth: 100,
-    gameStatus: 'not playing',
     isPaused: true,
     hasLost: false,
     score: 0,
@@ -59,7 +58,7 @@ let characters = {
         startHealth: 1000,
         health: 1000,
         hitAnimationSRC: '/images/boss1_hit.gif',
-        src: '/images/boss1.gif',
+        src: '/images/boss2.gif',
         spell: function() {
 
         }
@@ -89,7 +88,7 @@ const dialogue = [
     'Use magic staffs to release energy',
     'The more energy you have, the more damage dealt',
     'Say, what\'s your name anyway?',
-    `${player.getName}? What a silly name...`,
+    `${player.getName()}? What a silly name...`,
     'Well, I really must be going...',
     'NEELY GOES AWAY',
     '...',
@@ -140,21 +139,26 @@ tick = {
                 youLose();
                 return;
             }
-            
             if (gameState.isPaused) {
                 return;
             }
-            movePlayer(); // will call updateGameArea() and checkCollision()
+            movePlayer();
+            // move to a createWeapon function
             gameState.weaponCounter--;
-            if (gameState.currentBoss === 'dead') {
-                nextLevel();
-            } if (gameState.currentBoss === 'all dead') {
+            // move to a checkBoss function
+            if (gameState.bossHealth <= 0) {
+                gameState.isPaused = true;
+                gameState.level++;
+                gameState.currentBoss++;
+                this.resetBoard();
+                killBoss(BOSS_DELAY);
+            // move to a checkWin function
+            } if (gameState.currentBoss === 3) {
                 youWin();
             }
         }, tick_speed);
     },
     startLevel: function() {
-        gameState.gameStatus = 'playing';
         toggleDialogue();
         enterSnake();
         enterBoss();
@@ -165,7 +169,7 @@ tick = {
             togglePause();
         }, BOSS_DELAY + ALL_FIRE_DELAY);
         setTimeout(() => {
-            snake.remove();
+            snake.style.display = 'none';
             gameGrid[10].cells[0].classList.add('head');
             placeApple();
             gameState.isPaused = false;
@@ -306,6 +310,7 @@ function toggleDialogue() {
 }
 
 function enterSnake() {
+    snake.style.display = 'block';
     snake.classList.add('slither');
 }
 
@@ -526,14 +531,20 @@ function placeWeapon() {
 function damageBoss() {
     let baseDmg = player.getLength();
     let totalDmg = baseDmg * dmg_muliplyer;
+    let remaining;
     gameState.score += totalDmg;
-    characters.boss1.health -= totalDmg;
-    if (characters.boss1.health <= 0) {
-        killBoss(BOSS_DELAY); 
-        return;
+    switch (gameState.currentBoss) {
+        case 1: 
+            characters.boss1.health -= totalDmg;
+            gameState.bossHealth = characters.boss1.health;
+            remaining = characters.boss1.health / characters.boss1.startHealth * 100;
+            remaining <= 0 ? bossHealth.style.width = '0%' : bossHealth.style.width = `${remaining}%`
+            case 2: 
+            characters.boss2.health -= totalDmg;
+            gameState.bossHealth = characters.boss2.health;
+            remaining = characters.boss2.health / characters.boss2.startHealth * 100;
+            remaining <= 0 ? bossHealth.style.width = '0%' : bossHealth.style.width = `${remaining}%`
     }
-    let remaining = characters.boss1.health / characters.boss1.startHealth * 100;
-    bossHealth.style.width = `${remaining}%`
 }
 
 function animateHit() {
@@ -549,16 +560,11 @@ function animateHit() {
 }
 
 function killBoss(timing) {
-    gameState.isPaused = true;
-    gameState.level++;
-    gameState.boss++;
     boss.classList.add('bossDeath');
     boss.classList.remove('enterBoss');
-    tick.resetBoard();
     setTimeout(() => {
         boss.classList.remove('bossDeath');
         boss.classList.remove('enterBoss');
-        gameState.currentBoss = 'dead';
     }, timing)
 }
 
@@ -566,7 +572,7 @@ function wipeBoard() {
     for (let i = 0; i < ROWS; i++) {
         for (let j = 0; j < COLS; j++) {
             gameGrid[i].cells[j].className = 'cell';
-            player.body = [10, 0];
+            player.body = [[10, 0]];
         }
     }
 }
