@@ -277,7 +277,7 @@ body {
     background-repeat: no-repeat;
 }
 
-.Lefthead {
+.leftHead {
     background-image: url(/images/snakeLeft.gif);
     background-position: center; 
     background-size: contain; 

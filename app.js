@@ -19,8 +19,9 @@ let gameState = {
     level: 1,
     dialogueCounter: 0,
     apple: [10, 5],
-    weapon: undefined,
+    weapon: [15, 2],
     weaponCounter: 30,
+    appleCounter: 30,
 }
 
 let player = {
@@ -28,6 +29,7 @@ let player = {
     body: [[10, 0]],
     direction: 'right',
     hasApple: false,
+    hasWeapon: true,
     getLength: function() {
         return this.body.length;
     },
@@ -140,7 +142,7 @@ tick = {
                 return;
             }
             // move to a createWeapon function
-            gameState.weaponCounter--;
+            gameState.appleCounter--;
             // move to a checkBoss function
             if (gameState.bossHealth <= 0) {
                 gameState.isPaused = true;
@@ -420,6 +422,7 @@ function checkCollision() {
     // check weapon
     if (currentCell.classList.contains('weapon')) {
         currentCell.classList.toggle('weapon');
+        player.hasWeapon = true;
         damageBoss();
         animateHit();
     }
@@ -442,9 +445,9 @@ function updateGameArea(newHead, oldHead, lostTail) {
     if (lostTail.length === 2) { 
         remove = gameGrid[lostTail[0]].cells[lostTail[1]];
         // remove tail - if snake has not eaten
-        if (remove.classList.contains('head') || remove.classList.contains('Lefthead')) {
+        if (remove.classList.contains('head') || remove.classList.contains('leftHead')) {
             remove.classList.remove('head');
-            remove.classList.remove('Lefthead');
+            remove.classList.remove('leftHead');
         } if (remove.classList.contains('body')) {
             remove.classList.toggle('body');
         }
@@ -452,7 +455,7 @@ function updateGameArea(newHead, oldHead, lostTail) {
     
     // add newHead
     if (player.direction === 'left') {
-        add.classList.toggle('Lefthead');
+        add.classList.toggle('leftHead');
     } else {
         add.classList.toggle('head');
     }
@@ -461,17 +464,18 @@ function updateGameArea(newHead, oldHead, lostTail) {
     // but only for a snake that is at least 3 parts
     if (player.getNeck()) { 
     change.classList.remove('head');
-    change.classList.remove('Lefthead');
+    change.classList.remove('leftHead');
     change.classList.toggle('body');
     }
 
-    // place new apple if player has eaten
-    if (player.hasApple) {
+    // create apples every interval
+    if (gameState.appleCounter === 0) {
         createApple();
         placeApple();
     }
-    // place weapon
-    if (gameState.weaponCounter === 0) {
+    // place weapon if player picked one up
+    if (player.hasWeapon) {
+        player.hasWeapon = false;
         createWeapon();
         placeWeapon();
     }
@@ -487,11 +491,10 @@ function togglePause() {
 }
 
 function createApple() {
-    // random numbers between 0-20 and 0-40
     let collision = true;
     while (collision) {
-        let row = Math.floor(Math.random() * 20)
-        let col = Math.floor(Math.random() * 40)
+        let row = Math.floor(Math.random() * ROWS)
+        let col = Math.floor(Math.random() * COLS)
         for (let i = 0; i < player.getLength(); i++) {
             if (player.body[i][0] === row && player.body[i][1] === col) {
                 collision = true;
@@ -503,18 +506,11 @@ function createApple() {
     }
 }
 
-function placeApple() {
-    let apple = gameState.apple;
-    let cell = gameGrid[apple[0]].cells[apple[1]];
-    cell.classList.toggle('apple');
-}
-
 function createWeapon() {
-    // random numbers between 0-20 and 0-40
     let collision = true;
     while (collision) {
-        let row = Math.floor(Math.random() * 20)
-        let col = Math.floor(Math.random() * 40)
+        let row = Math.floor(Math.random() * ROWS)
+        let col = Math.floor(Math.random() * COLS)
         for (let i = 0; i < player.getLength(); i++) {
             if (player.body[i][0] === row && player.body[i][1] === col) {
                 collision = true;
@@ -526,11 +522,18 @@ function createWeapon() {
     }
 }
 
+function placeApple() {
+    let apple = gameState.apple;
+    let cell = gameGrid[apple[0]].cells[apple[1]];
+    cell.classList.toggle('apple');
+    gameState.appleCounter = 30;
+}
+
+
 function placeWeapon() {
     let weapon = gameState.weapon;
     let cell = gameGrid[weapon[0]].cells[weapon[1]];
     cell.classList.toggle('weapon');
-    gameState.weaponCounter = 30;
 }
 
 // BOSS LOGIC
