@@ -5,3 +5,5 @@ make tick.nextLevel() function so that
 
 use tick.nextLevel() to call the initial dialogue 
 section when page is loaded for first time
+
+replace switch statements with string literals like characters[`boss${gameState.currentBoss}`]. IF DOESNT WORK ASK QUESTION
