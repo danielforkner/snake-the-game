@@ -7,10 +7,6 @@
 // 6. play logic
 // 7. boss logic
 
-// TO ADD: 
-// score go up based on damage done to bosses not apples collected
-// lose condition should trigger functon "YOU LOSE" with score displayed
-
 // OBJECTS AND DIALOGUE
 let gameState = {
     currentBoss: 1,
@@ -107,7 +103,6 @@ createGameArea(); // rows and cols calculated based on h x w and cellsize. adjus
 
 const dialogueBtn = document.querySelector('.dialogueBtn');
 const textArea = document.querySelector('.text');
-
 const startBtn = document.querySelector('.skip');
 const dialogueArea = document.querySelector('.heroes');
 const dialogueText = document.querySelector('.dialogue');
@@ -127,7 +122,7 @@ const FIRE_DELAY = 30;
 const ALL_FIRE_DELAY = FIRE_DELAY * 20;
 const SNAKE_DELAY = 3000;
 const BOSS_DELAY = 5000;
-var dmg_muliplyer = 1;
+var dmg_muliplyer = 100;
 var tick_speed = 150;
 
 // THE ALMIGHTY TICK
@@ -142,7 +137,6 @@ tick = {
             if (gameState.isPaused) {
                 return;
             }
-            movePlayer();
             // move to a createWeapon function
             gameState.weaponCounter--;
             // move to a checkBoss function
@@ -150,12 +144,14 @@ tick = {
                 gameState.isPaused = true;
                 gameState.level++;
                 gameState.currentBoss++;
-                this.resetBoard();
                 killBoss(BOSS_DELAY);
-            // move to a checkWin function
+                this.resetBoard();
+                return;
+                // move to a checkWin function
             } if (gameState.currentBoss === 3) {
                 youWin();
             }
+            movePlayer();
         }, tick_speed);
     },
     startLevel: function() {
@@ -173,7 +169,6 @@ tick = {
             gameGrid[10].cells[0].classList.add('head');
             placeApple();
             gameState.isPaused = false;
-            this.startTick();
         }, BOSS_DELAY + ALL_FIRE_DELAY + tick_speed)
     },
     resetBoard: function() {
@@ -315,13 +310,16 @@ function enterSnake() {
 }
 
 function enterBoss() {
+    bossHealth.style.width = '100%'
     let img = document.getElementById('bossImg');
     switch (gameState.currentBoss) {
         case 1: 
             img.src = characters.boss1.src;
+            gameState.bossHealth = characters.boss1.startHealth;
             break;
         case 2: 
             img.src = characters.boss2.src;
+            gameState.bossHealth = characters.boss2.startHealth;
             break;
     }
 
@@ -439,7 +437,7 @@ function updateGameArea(newHead, oldHead, lostTail) {
     let add = gameGrid[newHead[0]].cells[newHead[1]]
     let change = gameGrid[oldHead[0]].cells[oldHead[1]];
     let remove;
-    if (lostTail.length === 2) { // source of apple bug (3/2/22). lostTail was not undefined, it was '[]', causing break out of function
+    if (lostTail.length === 2) { 
         remove = gameGrid[lostTail[0]].cells[lostTail[1]];
         // remove tail - if snake has not eaten
         if (remove.classList.contains('head')) {
@@ -539,21 +537,23 @@ function damageBoss() {
             gameState.bossHealth = characters.boss1.health;
             remaining = characters.boss1.health / characters.boss1.startHealth * 100;
             remaining <= 0 ? bossHealth.style.width = '0%' : bossHealth.style.width = `${remaining}%`
-            case 2: 
+            break;
+        case 2: 
             characters.boss2.health -= totalDmg;
             gameState.bossHealth = characters.boss2.health;
             remaining = characters.boss2.health / characters.boss2.startHealth * 100;
             remaining <= 0 ? bossHealth.style.width = '0%' : bossHealth.style.width = `${remaining}%`
+            break;    
     }
 }
 
 function animateHit() {
     let current = gameState.currentBoss;
     switch (current) {
-        case 'boss1': 
+        case 1: 
             hitAnimation.innerHTML = `<img src="${characters.boss1.hitAnimationSRC}" class="hitAnimation" />`;
             break;
-        case 'boss2':
+        case 2:
             hitAnimation.innerHTML = `<img src="${characters.boss2.hitAnimationSRC}" class="hitAnimation" />`;
             break;
     }
@@ -573,6 +573,7 @@ function wipeBoard() {
         for (let j = 0; j < COLS; j++) {
             gameGrid[i].cells[j].className = 'cell';
             player.body = [[10, 0]];
+            player.hasApple = false;
         }
     }
 }
@@ -582,6 +583,7 @@ function youWin() {
 }
 
 function youLose() {
+    gameState.isPaused = true;
     let score = document.querySelector('.loseScore');
     score.innerText = `${gameState.score} damage dealt`;
     loseText.classList.add('youLose');
