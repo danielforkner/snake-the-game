@@ -274,11 +274,20 @@ body {
     background-image: url(/images/snake.gif);
     background-position: center; 
     background-size: contain; 
+    background-repeat: no-repeat;
+}
+
+.Lefthead {
+    background-image: url(/images/snakeLeft.gif);
+    background-position: center; 
+    background-size: contain; 
+    background-repeat: no-repeat;
 }
 .body {
     background-image: url(/images/orb_green.png);
     background-position: center; 
     background-size: contain; 
+    background-repeat: no-repeat;
 }
 
 .fire {
@@ -287,6 +296,7 @@ body {
 .fire.on {
     background: url(/images/fire.gif);
     background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .border {
@@ -302,12 +312,14 @@ body {
     background: url(/images/energy.png);
     background-position: center; 
     background-size: contain; 
+    background-repeat: no-repeat;
 }
 
 .weapon {
     background: url(/images/weapon.png);
     background-position: center; 
     background-size: contain;
+    background-repeat: no-repeat;
 }
 
 /* ANIMATIONS */

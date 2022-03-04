@@ -1,3 +1,5 @@
+
+
 // TABLE OF CONTENTS (not current)
 // 1. objects and dialogue
 // 2. global variables
@@ -440,20 +442,26 @@ function updateGameArea(newHead, oldHead, lostTail) {
     if (lostTail.length === 2) { 
         remove = gameGrid[lostTail[0]].cells[lostTail[1]];
         // remove tail - if snake has not eaten
-        if (remove.classList.contains('head')) {
-            remove.classList.toggle('head');
+        if (remove.classList.contains('head') || remove.classList.contains('Lefthead')) {
+            remove.classList.remove('head');
+            remove.classList.remove('Lefthead');
         } if (remove.classList.contains('body')) {
             remove.classList.toggle('body');
         }
     }
     
     // add newHead
-    add.classList.toggle('head');
+    if (player.direction === 'left') {
+        add.classList.toggle('Lefthead');
+    } else {
+        add.classList.toggle('head');
+    }
 
     // switch oldHead to body
     // but only for a snake that is at least 3 parts
     if (player.getNeck()) { 
-    change.classList.toggle('head');
+    change.classList.remove('head');
+    change.classList.remove('Lefthead');
     change.classList.toggle('body');
     }
 
@@ -589,3 +597,5 @@ function youLose() {
     loseText.classList.add('youLose');
 }
 
+// start
+tick.startTick();
