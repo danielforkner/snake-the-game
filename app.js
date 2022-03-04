@@ -93,15 +93,21 @@ const dialogue = [
 // GLOBAL VARIABLES
 const HEIGHT = 300; // height of gameArea in px
 const WIDTH = 600; // width of gameArea in px
-const CELL_SIZE = 15; // hw of cell in px
+const TOTAL_CELLS = 800;
+const CELL_SIZE = Math.sqrt(HEIGHT * WIDTH / TOTAL_CELLS);
+const ROWS = HEIGHT / CELL_SIZE;
+const COLS = WIDTH / CELL_SIZE;
 const gameArea = document.querySelector('.gameArea');
-createGameArea(); // NOTE: this is a 20row by 40column board!!
+createGameArea(); // rows and cols calculated based on h x w and cellsize. adjust accordingly.
 
 const dialogueBtn = document.querySelector('.dialogueBtn');
 const textArea = document.querySelector('.text');
 
 const startBtn = document.querySelector('.skip');
-const heroes = document.querySelector('.heroes');
+const dialogueArea = document.querySelector('.heroes');
+const dialogueText = document.querySelector('.dialogue');
+const friend = document.querySelector('.hero.left');
+const hero = document.querySelector('.hero.right');
 const gameGrid = document.querySelectorAll('tr');
 const borders = document.querySelectorAll('.border');
 const columns = document.querySelectorAll('.column');
@@ -143,11 +149,11 @@ tick = {
     },
     startGame: function() {
         gameState.gameStatus = 'playing';
-        goDown();
+        toggleDialogue();
         enterSnake();
         enterBoss();
         setTimeout(() => {
-            makeFire();
+            toggleFire(FIRE_DELAY);
         }, BOSS_DELAY);
         setTimeout(() => {
             togglePause();
@@ -159,14 +165,23 @@ tick = {
             gameState.isPaused = false;
             this.startTick();
         }, BOSS_DELAY + ALL_FIRE_DELAY + tick_speed)
-    }
+    },
+    resetBoard: function() {
+        wipeBoard();
+        toggleFire(FIRE_DELAY * 8);
+        toggleDialogue();
+    },
+    nextLevel: function() {
+        toggleDialogue();
+    },
 };
 
 // EVENT LISTENERS
 startBtn.addEventListener('click', () => {
-    gameState.dialogueCounter = 7;
-    startBtn.remove();
-    tick.startGame();
+    toggleDialogue();
+    // gameState.dialogueCounter = 7;
+    // startBtn.remove();
+    // tick.startGame();
 })
 
 dialogueBtn.addEventListener('click', () => {
@@ -205,12 +220,10 @@ window.addEventListener('keydown', (e) => {
 
 // CREATE GAME
 function createGameArea() {
-    let rows = HEIGHT / CELL_SIZE;
-    let columns = WIDTH / CELL_SIZE;
-    for (let i = 0; i < rows; i++) {
+    for (let i = 0; i < ROWS; i++) {
         let row = document.createElement('tr')
         gameArea.appendChild(row);
-        for (let j = 0; j < columns; j++) {
+        for (let j = 0; j < COLS; j++) {
             let cell = document.createElement('td');
             cell.classList.add('cell')
             row.append(cell)
@@ -218,23 +231,56 @@ function createGameArea() {
     }
 }
 
-function makeFire() {
-    for (let i = 0; i < fires.length; i++) {
+function toggleFire(timing) {
+    if (!fires[0].classList.contains('on')) {
+        for (let i = 0; i < fires.length; i++) {
+            setTimeout(() => {
+                fires[i].classList.add('on');
+            }, i*timing)
+        }
+        
         setTimeout(() => {
-            fires[i].classList.add('on');
-        }, i*FIRE_DELAY)
+            borders[0].style.backgroundColor = 'brown';
+            borders[1].style.backgroundColor = 'brown';
+            columns[0].style.borderRight = '12px solid brown';
+            columns[1].style.borderLeft = '12px solid brown';
+        }, 20*timing)
+        return;
+    } else {
+        for (let i = fires.length - 1; i >= 0; i--) {
+            setTimeout(() => {
+                fires[i].classList.remove('on');
+            }, i*timing)
+        }
+        
+        setTimeout(() => {
+            borders[0].style.backgroundColor = 'gray';
+            borders[1].style.backgroundColor = 'gray';
+            columns[0].style.borderRight = '12px solid transparent';
+            columns[1].style.borderLeft = '12px solid transparent';
+        }, 20*timing)
+        return;
     }
-
-    setTimeout(() => {
-        borders[0].style.backgroundColor = 'brown';
-        borders[1].style.backgroundColor = 'brown';
-        columns[0].style.borderRight = '12px solid brown';
-        columns[1].style.borderLeft = '12px solid brown';
-    }, 20*FIRE_DELAY)
 }
 
-function goDown() {
-    heroes.classList.add('goDown');
+function toggleDialogue() {
+    if (dialogueArea.classList.contains('down') || dialogueArea.classList.contains('goDown')) {
+        dialogueArea.classList.remove('goDown');
+        dialogueArea.classList.remove('down');
+        dialogueArea.classList.add('goUp');
+        friend.classList.add('enterLeft')
+        hero.classList.add('enterRight')
+        dialogueText.classList.add('dialogueEnter');
+        return;
+    } else {
+        dialogueArea.classList.remove('goUp');
+        dialogueArea.classList.add('goDown');
+        setTimeout(() => {
+            friend.classList.remove('enterLeft')
+            hero.classList.remove('enterRight')
+            dialogueText.classList.remove('dialogueEnter');
+        }, 3000);
+    }
 }
 
 function enterSnake() {
@@ -471,14 +517,23 @@ function animateHit() {
 }
 
 function killBoss(timing) {
+    gameState.isPaused = true;
     boss.classList.add('bossDeath');
     boss.classList.remove('enterBoss');
-    gameState.isPaused = true;
+    tick.resetBoard();
     setTimeout(() => {
         boss.classList.remove('bossDeath');
         boss.classList.remove('enterBoss');
         gameState.currentBoss = 'dead';
     }, timing)
+}
+
+function wipeBoard() {
+    for (let i = 0; i < ROWS; i++) {
+        for (let j = 0; j < COLS; j++) {
+            gameGrid[i].cells[j].className = 'cell';
+        }
+    }
 }
 
 function nextLevel() {
@@ -494,3 +549,4 @@ function youLose() {
     score.innerText = `${gameState.score} damage dealt`;
     loseText.classList.add('youLose');
 }
+

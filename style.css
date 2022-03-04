@@ -33,22 +33,42 @@ body {
     z-index: -1;
 }
 
+.down {
+    top: 100px;
+}
+
 .goDown {
     animation: ease goDown forwards;
+    animation-duration: 5s;
+}
+
+.goUp {
+    animation: ease goUp forwards;
     animation-duration: 5s;
 }
 
 .hero.left, .hero.right {
     position: relative;
     width: 150px;
+    opacity: 0;
 }
 
 .hero.left {
+    left: -1000px;
+}
+
+.hero.right {
+    right: -1000px;
+}
+
+.enterLeft {
+    opacity: 1;
     animation: ease enterLeft forwards;
     animation-duration: 5s;
 }
 
-.hero.right {
+.enterRight {
+    opacity: 1;
     animation: ease enterRight forwards;
     animation-duration: 5s;
 }
@@ -81,6 +101,9 @@ body {
     padding: 10px;
     color: white;
     opacity: 0;
+}
+
+.dialogueEnter {
     animation: ease startDialogue forwards;
     animation-duration: 0.5s;
     animation-delay: 5s;
@@ -243,12 +266,12 @@ body {
 
 /* PLAYER PARTS */
 .head {
-    background: url(/images/snake.gif);
+    background-image: url(/images/snake.gif);
     background-position: center; 
     background-size: contain; 
 }
 .body {
-    background: url(/images/orb_green.png);
+    background-image: url(/images/orb_green.png);
     background-position: center; 
     background-size: contain; 
 }
@@ -355,18 +378,22 @@ body {
 
 @keyframes enterLeft {
     0% {
+        opacity: 1;
         left: -1000px;
     }
     100% {
+        opacity: 1;
         left: 0px;
     }
 }
 
 @keyframes enterRight {
     0% {
+        opacity: 1;
         right: -1000px;
     }
     100% {
+        opacity: 1;
         right: 0px;
     }
 }
@@ -377,6 +404,17 @@ body {
     100% {
         top: 100px;
         opacity: 0;
+    }
+}
+
+@keyframes goUp {
+    0% {
+        top: 100px;
+        opacity: 0
+    }
+    100% {
+        top: -150px;
+        opacity: 1;
     }
 }
 
