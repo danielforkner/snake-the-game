@@ -47,7 +47,7 @@ let player = {
     },
 }
 
-let characters = {
+let bosses = {
     boss1: {
         startHealth: 100,
         health: 100,
@@ -57,12 +57,26 @@ let characters = {
     boss2: {
         startHealth: 1000,
         health: 1000,
+        isTransformed: false,
         hitAnimationSRC: '/images/boss1_hit.gif',
         src: '/images/boss2.gif',
-        spell: function() {
-
-        }
+        spells: {
+            spellOfTime: function() {
+                tick_speed *= 1.25;
+            },
+            transform: function() {
+                this.isTransformed = true;
+                let img = document.getElementById('bossImg');
+                img.src = '/images/boss2transform.gif';
+            },
+        },
     },
+    getLength: function() {
+        return Object.keys(this).length;
+    }
+}
+
+let characters = {
     friend1: {
         src: '/images/friend1.png',
     },
@@ -105,6 +119,8 @@ const COLS = WIDTH / CELL_SIZE;
 const gameArea = document.querySelector('.gameArea');
 createGameArea(); // rows and cols calculated based on h x w and cellsize. adjust accordingly.
 
+const enterBtn = document.getElementById('enter');
+const title = document.querySelector('.titleContainer');
 const dialogueBtn = document.querySelector('.dialogueBtn');
 const textArea = document.querySelector('.text');
 const startBtn = document.querySelector('.skip');
@@ -149,12 +165,14 @@ tick = {
                 gameState.level++;
                 gameState.currentBoss++;
                 killBoss(BOSS_DELAY);
+                if (gameState.currentBoss === bosses.getLength()) {
+                    youWin();
+                    return;
+                }
                 this.resetBoard();
                 return;
-                // move to a checkWin function
-            } if (gameState.currentBoss === 3) {
-                youWin();
             }
+                // move to a checkWin function
             movePlayer();
         }, tick_speed);
     },
@@ -176,6 +194,7 @@ tick = {
         }, BOSS_DELAY + ALL_FIRE_DELAY + tick_speed)
     },
     resetBoard: function() {
+        player.hasWeapon = true;
         wipeBoard();
         toggleFire(FIRE_DELAY * 8);
         toggleDialogue();
@@ -186,6 +205,11 @@ tick = {
 };
 
 // EVENT LISTENERS
+enterBtn.addEventListener('click', () => {
+    title.classList.add('fadeOut');
+    toggleDialogue();
+})
+
 startBtn.addEventListener('click', () => {
     toggleDialogue();
     // gameState.dialogueCounter = 7;
@@ -318,12 +342,12 @@ function enterBoss() {
     let img = document.getElementById('bossImg');
     switch (gameState.currentBoss) {
         case 1: 
-            img.src = characters.boss1.src;
-            gameState.bossHealth = characters.boss1.startHealth;
+            img.src = bosses.boss1.src;
+            gameState.bossHealth = bosses.boss1.startHealth;
             break;
         case 2: 
-            img.src = characters.boss2.src;
-            gameState.bossHealth = characters.boss2.startHealth;
+            img.src = bosses.boss2.src;
+            gameState.bossHealth = bosses.boss2.startHealth;
             break;
     }
 
@@ -546,16 +570,19 @@ function damageBoss() {
     gameState.score += totalDmg;
     switch (gameState.currentBoss) {
         case 1: 
-            characters.boss1.health -= totalDmg;
-            gameState.bossHealth = characters.boss1.health;
-            remaining = characters.boss1.health / characters.boss1.startHealth * 100;
+            bosses.boss1.health -= totalDmg;
+            gameState.bossHealth = bosses.boss1.health;
+            remaining = bosses.boss1.health / bosses.boss1.startHealth * 100;
             remaining <= 0 ? bossHealth.style.width = '0%' : bossHealth.style.width = `${remaining}%`
             break;
         case 2: 
-            characters.boss2.health -= totalDmg;
-            gameState.bossHealth = characters.boss2.health;
-            remaining = characters.boss2.health / characters.boss2.startHealth * 100;
+            bosses.boss2.health -= totalDmg;
+            gameState.bossHealth = bosses.boss2.health;
+            remaining = bosses.boss2.health / bosses.boss2.startHealth * 100;
             remaining <= 0 ? bossHealth.style.width = '0%' : bossHealth.style.width = `${remaining}%`
+            if (remaining <= 50 && !bosses.boss2.isTransformed) {
+                bosses.boss2.spells.transform();
+            }
             break;    
     }
 }
@@ -564,10 +591,10 @@ function animateHit() {
     let current = gameState.currentBoss;
     switch (current) {
         case 1: 
-            hitAnimation.innerHTML = `<img src="${characters.boss1.hitAnimationSRC}" class="hitAnimation" />`;
+            hitAnimation.innerHTML = `<img src="${bosses.boss1.hitAnimationSRC}" class="hitAnimation" />`;
             break;
         case 2:
-            hitAnimation.innerHTML = `<img src="${characters.boss2.hitAnimationSRC}" class="hitAnimation" />`;
+            hitAnimation.innerHTML = `<img src="${bosses.boss2.hitAnimationSRC}" class="hitAnimation" />`;
             break;
     }
 }
@@ -592,7 +619,15 @@ function wipeBoard() {
 }
 
 function youWin() {
-    // function
+    toggleFire(FIRE_DELAY * 8);
+    title.classList.remove('fadeOut');
+    title.classList.add('fadeIn');
+    enterBtn.remove();
+    let h1 = document.getElementById('gameName');
+    h1.innerText = 'YOU WIN';
+    let thankYou = document.createElement('p');
+    thankYou.innerText = `You dealt ${gameState.score} total damage`;
+    title.append(thankYou);
 }
 
 function youLose() {

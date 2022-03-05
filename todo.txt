@@ -1,3 +1,7 @@
+spells
+
+boss transform
+
 replace switch statements with string literals like characters[`boss${gameState.currentBoss}`]. IF DOESNT WORK ASK QUESTION
 
 deactivate keydown when paused, and force 'right' on spawn

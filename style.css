@@ -16,9 +16,62 @@
 }
 
 body {
+    display: relative;
     overflow: hidden;
     width: 100%;
+    height: 100vh;
     background-color: #866286;
+}
+
+.titleContainer {
+    font-family: OptimusPrinceps;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    font-size: 2rem;
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.titleContainer > img {
+    width: 300px;
+    margin: 10px;
+    /* background: url(/images/bluefire.gif);
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: 50%; */
+}
+
+.titleContainer > p {
+    padding: 5px;
+}
+
+.titleContainer > h1 {
+    font-size: 4rem;
+}
+
+.titleContainer #enter:hover {
+    cursor: pointer;
+    background-color: #4F0001;
+    box-shadow: 1px 1px 20px #4F0001;
+}
+
+.fadeOut {
+    animation-name: fadeout;
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+}
+
+.fadeIn {
+    animation-name: fadeIn;
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
 }
 
 .heroes {
