@@ -63,21 +63,25 @@ let buffs = {
             setTimeout(() => {
                 dmg_muliplyer /= 2;
                 display.remove();
-            }, 5000)
+            }, buff_duration)
         },
     },
     slowTime: {
         className: 'slowTime',
         consume: function() {
-            tick_speed /= 2;
+            clearInterval(intervalID);
+            tick_speed *= 2;
             let display = document.createElement('p');
             display.id = 'slowTime';
             buffDisplay.append(display);
             display.innerHTML = `SLOW TIME`;
+            tick.startTick();
             setTimeout(() => {
-                tick_speed *= 2;
+                tick_speed /= 2;
                 display.remove();
-            }, 5000)
+                clearInterval(intervalID);
+                tick.startTick();
+            }, buff_duration)
         },
     }
 }
@@ -90,11 +94,17 @@ let bosses = {
         hitAnimationSRC: '/images/boss1_hit.gif',
     },
     boss2: {
+        startHealth: 200,
+        health: 100,
+        src: '/images/boss2.gif',
+        hitAnimationSRC: '/images/boss2_hit.gif',
+    },
+    boss3: {
         startHealth: 1000,
         health: 1000,
         isTransformed: false,
-        hitAnimationSRC: '/images/boss1_hit.gif',
-        src: '/images/boss2.gif',
+        hitAnimationSRC: '/images/boss3_hit.gif',
+        src: '/images/boss3.gif',
         spells: {
             spellOfTime: function() {
                 tick_speed *= 1.25;
@@ -180,8 +190,10 @@ const BOSS_DELAY = 5000;
 var dmg_muliplyer = 1;
 var tick_speed = 150;
 var second = 0;
-var buff_interval = 5;
+var buff_interval = 10;
+var buff_duration = 5000;
 const buffDisplay = document.querySelector('.buffDisplay');
+let intervalID;
 
 // THE ALMIGHTY TICK
 tick = {
@@ -201,7 +213,7 @@ tick = {
         }, 1000)
     },
     startTick: function() {
-        setInterval(() => {
+        intervalID = setInterval(() => {
             if (gameState.hasLost) {
                 gameState.hasLost = false;
                 youLose();
@@ -401,6 +413,10 @@ function enterBoss() {
         case 2: 
             img.src = bosses.boss2.src;
             gameState.bossHealth = bosses.boss2.startHealth;
+            break;
+        case 3: 
+            img.src = bosses.boss3.src;
+            gameState.bossHealth = bosses.boss3.startHealth;
             break;
     }
 
@@ -677,8 +693,14 @@ function damageBoss() {
             gameState.bossHealth = bosses.boss2.health;
             remaining = bosses.boss2.health / bosses.boss2.startHealth * 100;
             remaining <= 0 ? bossHealth.style.width = '0%' : bossHealth.style.width = `${remaining}%`
-            if (remaining <= 50 && !bosses.boss2.isTransformed) {
-                bosses.boss2.spells.spellOfTransform();
+            break;    
+        case 3: 
+            bosses.boss3.health -= totalDmg;
+            gameState.bossHealth = bosses.boss3.health;
+            remaining = bosses.boss3.health / bosses.boss3.startHealth * 100;
+            remaining <= 0 ? bossHealth.style.width = '0%' : bossHealth.style.width = `${remaining}%`
+            if (remaining <= 50 && !bosses.boss3.isTransformed) {
+                bosses.boss3.spells.spellOfTransform();
             }
             break;    
     }
@@ -692,6 +714,9 @@ function animateHit() {
             break;
         case 2:
             hitAnimation.innerHTML = `<img src="${bosses.boss2.hitAnimationSRC}" class="hitAnimation" />`;
+            break;
+        case 3:
+            hitAnimation.innerHTML = `<img src="${bosses.boss3.hitAnimationSRC}" class="hitAnimation" />`;
             break;
     }
 }
