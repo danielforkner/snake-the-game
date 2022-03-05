@@ -26,7 +26,7 @@ let gameState = {
 
 let player = {
     name: 'Snek',
-    body: [[10, 0]],
+    body: [[10, -1]],
     direction: 'right',
     hasApple: false,
     hasWeapon: true,
@@ -445,11 +445,13 @@ function updateGameArea(newHead, oldHead, lostTail) {
     if (lostTail.length === 2) { 
         remove = gameGrid[lostTail[0]].cells[lostTail[1]];
         // remove tail - if snake has not eaten
-        if (remove.classList.contains('head') || remove.classList.contains('leftHead')) {
-            remove.classList.remove('head');
-            remove.classList.remove('leftHead');
-        } if (remove.classList.contains('body')) {
-            remove.classList.toggle('body');
+        if (remove !== undefined) { // undefined when game starts
+            if (remove.classList.contains('head') || remove.classList.contains('leftHead')) {
+                remove.classList.remove('head');
+                remove.classList.remove('leftHead');
+            } if (remove.classList.contains('body')) {
+                remove.classList.toggle('body');
+            }
         }
     }
     
@@ -583,7 +585,7 @@ function wipeBoard() {
     for (let i = 0; i < ROWS; i++) {
         for (let j = 0; j < COLS; j++) {
             gameGrid[i].cells[j].className = 'cell';
-            player.body = [[10, 0]];
+            player.body = [[10, -1]];
             player.hasApple = false;
         }
     }

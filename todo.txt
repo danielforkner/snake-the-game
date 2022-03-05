@@ -1,9 +1,6 @@
-make tick.nextLevel() function so that 
-    - dialogue characters come back up (add .goUp css class)
-    - boss change
-    - gameState reset
-
-use tick.nextLevel() to call the initial dialogue 
-section when page is loaded for first time
-
 replace switch statements with string literals like characters[`boss${gameState.currentBoss}`]. IF DOESNT WORK ASK QUESTION
+
+deactivate keydown when paused, and force 'right' on spawn
+
+mobile and screen responsive
+
