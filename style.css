@@ -362,7 +362,7 @@ body {
 
 /* GAME PIECES */
 .apple {
-    background: url(/images/energy.png);
+    background: url(/images/orb_blue.png);
     background-position: center; 
     background-size: contain; 
     background-repeat: no-repeat;
@@ -373,6 +373,38 @@ body {
     background-position: center; 
     background-size: contain;
     background-repeat: no-repeat;
+}
+
+.buffDmg {
+    background: url(/images/dmgBuff.png);
+    background-position: center; 
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.slowTime {
+    background: url(/images/timeBuff.png);
+    background-position: center; 
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.buffDisplay {
+    position: absolute;
+    bottom: -50px;
+    height: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: white;
+}
+
+.buffDisplay > p {
+    padding: 5px;
+    border: 1px solid white;
+    background-color: #4F0001;
 }
 
 /* ANIMATIONS */

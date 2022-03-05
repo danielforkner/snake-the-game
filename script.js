@@ -20,6 +20,8 @@ let gameState = {
     dialogueCounter: 0,
     apple: [10, 5],
     weapon: [15, 2],
+    buff: [],
+    buffName: null,
     weaponCounter: 30,
     appleCounter: 30,
 }
@@ -47,6 +49,39 @@ let player = {
     },
 }
 
+let collisionClasses = ['head', 'body', 'apple', 'weapon', 'buff'];
+
+let buffs = {
+    damageMultiplyer: {
+        className: 'buffDmg',
+        consume: function() {
+            dmg_muliplyer *= 2;
+            let display = document.createElement('p');
+            display.id = 'buffDmg';
+            buffDisplay.append(display);
+            display.innerHTML = `DAMAGE x${dmg_muliplyer}`;
+            setTimeout(() => {
+                dmg_muliplyer /= 2;
+                display.remove();
+            }, 5000)
+        },
+    },
+    slowTime: {
+        className: 'slowTime',
+        consume: function() {
+            tick_speed /= 2;
+            let display = document.createElement('p');
+            display.id = 'slowTime';
+            buffDisplay.append(display);
+            display.innerHTML = `SLOW TIME`;
+            setTimeout(() => {
+                tick_speed *= 2;
+                display.remove();
+            }, 5000)
+        },
+    }
+}
+
 let bosses = {
     boss1: {
         startHealth: 100,
@@ -64,7 +99,7 @@ let bosses = {
             spellOfTime: function() {
                 tick_speed *= 1.25;
             },
-            transform: function() {
+            spellOfTransform: function() {
                 this.isTransformed = true;
                 let img = document.getElementById('bossImg');
                 img.src = '/images/boss2transform.gif';
@@ -144,9 +179,27 @@ const SNAKE_DELAY = 3000;
 const BOSS_DELAY = 5000;
 var dmg_muliplyer = 1;
 var tick_speed = 150;
+var second = 0;
+var buff_interval = 5;
+const buffDisplay = document.querySelector('.buffDisplay');
 
 // THE ALMIGHTY TICK
 tick = {
+    // count seconds 60 at a time
+    startCounter: function() {
+        setInterval(() => {
+            if (!gameState.isPaused) {
+                if (second % buff_interval === 0) {
+                    createBuff();
+                    placeBuff();
+                }
+            }
+            second++
+            if (second === 60) {
+                second = 0;
+            }
+        }, 1000)
+    },
     startTick: function() {
         setInterval(() => {
             if (gameState.hasLost) {
@@ -450,6 +503,13 @@ function checkCollision() {
         damageBoss();
         animateHit();
     }
+
+    if (currentCell.classList.contains('buff')) {
+        let name = gameState.buffName;
+        buffs[name].consume();
+        currentCell.classList.toggle('buff');
+        currentCell.classList.toggle(buffs[name].className);
+    }
     return false;
 }
 
@@ -517,35 +577,72 @@ function togglePause() {
 }
 
 function createApple() {
-    let collision = true;
-    while (collision) {
-        let row = Math.floor(Math.random() * ROWS)
-        let col = Math.floor(Math.random() * COLS)
-        for (let i = 0; i < player.getLength(); i++) {
-            if (player.body[i][0] === row && player.body[i][1] === col) {
+    let collision = false;
+    let row, col;
+    do {
+        row = Math.floor(Math.random() * ROWS)
+        col = Math.floor(Math.random() * COLS)
+        let target = gameGrid[row].cells[col]
+        for (let i = 0; i < collisionClasses.length; i++) {
+            if (target.classList.contains(collisionClasses[i])) {
                 collision = true;
                 break;
             }
         }
-        collision = false;
-        gameState.apple = [row, col];
+    } while (collision === true);
+    gameState.apple = [row, col];
+}
+
+function createBuff() {
+    let currentBuff = document.querySelector('.buff');
+    // only one buff on the board at a time
+    if (currentBuff !== null) {
+        currentBuff.className = 'cell';
     }
+    let collision = false;
+    let row, col;
+    do {
+        row = Math.floor(Math.random() * ROWS)
+        col = Math.floor(Math.random() * COLS)
+        let target = gameGrid[row].cells[col]
+        for (let i = 0; i < collisionClasses.length; i++) {
+            if (target.classList.contains(collisionClasses[i])) {
+                collision = true;
+                break;
+            }
+        }
+    } while (collision === true);
+    gameState.buff = [row, col];
 }
 
 function createWeapon() {
-    let collision = true;
-    while (collision) {
-        let row = Math.floor(Math.random() * ROWS)
-        let col = Math.floor(Math.random() * COLS)
-        for (let i = 0; i < player.getLength(); i++) {
-            if (player.body[i][0] === row && player.body[i][1] === col) {
+    let collision = false;
+    let row, col;
+    do {
+        row = Math.floor(Math.random() * ROWS)
+        col = Math.floor(Math.random() * COLS)
+        let target = gameGrid[row].cells[col]
+        for (let i = 0; i < collisionClasses.length; i++) {
+            if (target.classList.contains(collisionClasses[i])) {
                 collision = true;
                 break;
             }
         }
-        collision = false;
-        gameState.weapon = [row, col];
-    }
+    } while (collision === true);
+    gameState.weapon = [row, col];
+}
+
+function placeBuff() {
+    // get a random buff
+    let buffArray = Object.keys(buffs);
+    let index = Math.floor(Math.random() * buffArray.length);
+    let name = buffArray[index];
+
+    let buff = gameState.buff;
+    let cell = gameGrid[buff[0]].cells[buff[1]];
+    cell.classList.add('buff')
+    cell.classList.add(buffs[name].className);
+    gameState.buffName = name;
 }
 
 function placeApple() {
@@ -581,7 +678,7 @@ function damageBoss() {
             remaining = bosses.boss2.health / bosses.boss2.startHealth * 100;
             remaining <= 0 ? bossHealth.style.width = '0%' : bossHealth.style.width = `${remaining}%`
             if (remaining <= 50 && !bosses.boss2.isTransformed) {
-                bosses.boss2.spells.transform();
+                bosses.boss2.spells.spellOfTransform();
             }
             break;    
     }
@@ -639,3 +736,4 @@ function youLose() {
 
 // start
 tick.startTick();
+tick.startCounter();

@@ -1,6 +1,6 @@
 spells
 
-boss transform
+use colissionClassses to check for create'item' conflicts
 
 replace switch statements with string literals like characters[`boss${gameState.currentBoss}`]. IF DOESNT WORK ASK QUESTION
 
