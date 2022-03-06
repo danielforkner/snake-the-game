@@ -480,7 +480,7 @@ function toggleDialogue() {
                 img.src = characters.friend1.src;
                 gameState.dialogueCounter = 20;
                 let door = document.getElementById('doorImg');
-                door.src = "/images/Dungeon-door-skull.png"
+                door.src = "./images/Dungeon-door-skull.png"
                 break;
             case 4: 
                 img.src = characters.friend1.src;
