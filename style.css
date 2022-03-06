@@ -26,6 +26,7 @@
 }
 
 input[type=text], input[type=button] {
+    /* this does nothing?? */
     -webkit-appearance: none;
     -webkit-border-radius: 0;
     border-radius: 0;
@@ -40,7 +41,7 @@ body {
 }
 
 .titleContainer {
-    font-family: OptimusPrinceps;
+    font-family: 'Optimus Princeps', sans-serif;
     background-color: rgba(0, 0, 0, 0.9);
     color: white;
     font-size: 2rem;
@@ -216,7 +217,7 @@ body {
     flex-direction: column;
     width: 100%;
     height: 100%;
-    font-family: 'Optimus Princeps';
+    font-family: 'Optimus Princeps', sans-serif;
     color: #4F0001;
     background-color: rgba(0, 0, 0, 0.85);
     animation: 3s forwards fadeIn;

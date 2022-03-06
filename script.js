@@ -206,7 +206,10 @@ const COLS = WIDTH / CELL_SIZE;
 const gameArea = document.querySelector('.gameArea');
 createGameArea(); // rows and cols calculated based on h x w and cellsize. adjust accordingly.
 
-const mobileControls = document.querySelectorAll('.control');
+const up = document.getElementById('up');
+const down = document.getElementById('down');
+const left = document.getElementById('left');
+const right = document.getElementById('right');
 const enterBtn = document.getElementById('enter');
 const title = document.querySelector('.titleContainer');
 const dialogueBtn = document.querySelector('.dialogueBtn');
@@ -399,25 +402,30 @@ window.addEventListener('keydown', (e) => {
     }
 })
 
-for (let i = 0; i < 4; i++) {
-    mobileControls[i].addEventListener('click', (e) => {
-        if (gameState.isPaused) return;
-        switch (e.target.id) {
-             case 'up':
-                player.direction = 'up';
-                break;
-             case 'left':
-                player.direction = 'left';
-                break;
-             case 'right':
-                player.direction = 'right';
-                break;
-             case 'down':
-                player.direction = 'down';
-                break;
-         }
-    });
-}
+up.addEventListener('click', (e) => {
+    if (gameState.isPaused) {
+        return
+    };
+    player.direction = 'up';
+})
+down.addEventListener('click', (e) => {
+    if (gameState.isPaused) {
+        return
+    };
+    player.direction = 'down';
+})
+left.addEventListener('click', (e) => {
+    if (gameState.isPaused) {
+        return
+    };
+    player.direction = 'left';
+})
+right.addEventListener('click', (e) => {
+    if (gameState.isPaused) {
+        return
+    };
+    player.direction = 'right';
+})
 
 // CREATE GAME
 function createGameArea() {
@@ -601,7 +609,7 @@ function movePlayer() {
 function checkCollision() {
     let head = player.getHead();
     // check walls
-    if (head[0] >= 20 || head[0] < 0 || head[1] >= 40 || head[1] < 0) {
+    if (head[0] >= ROWS || head[0] < 0 || head[1] >= COLS || head[1] < 0) {
         gameState.isPaused = true;
         gameState.hasLost = true;
         return true;
