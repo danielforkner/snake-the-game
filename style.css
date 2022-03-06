@@ -28,6 +28,7 @@
 input[type=text], input[type=button] {
     -webkit-appearance: none;
     -webkit-border-radius: 0;
+    border-radius: 0;
 }
 
 body {
@@ -464,6 +465,9 @@ body {
     .snake {
         width: var(--cellSizeLarge);
         height: var(--cellSizeLarge);
+    }
+    .boss {
+        width: 250px;
     }
 }
 

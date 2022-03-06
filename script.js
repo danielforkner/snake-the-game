@@ -295,7 +295,7 @@ const tick = {
         toggleDialogue();
         enterSnake();
         enterBoss();
-        skipBtn.style.display = 'block';
+        skipBtn.style.display = 'none';
         setTimeout(() => {
             toggleFire(FIRE_DELAY);
         }, BOSS_DELAY);
@@ -467,6 +467,7 @@ function toggleFire(timing) {
 function toggleDialogue() {
     if (dialogueArea.classList.contains('down') || dialogueArea.classList.contains('goDown')) {
         let img = document.getElementById('friendImg');
+        skipBtn.style.display = 'block';
         switch (gameState.level) {
             case 1: 
                 img.src = characters.friend1.src;
@@ -485,6 +486,7 @@ function toggleDialogue() {
             case 4: 
                 img.src = characters.friend1.src;
                 gameState.dialogueCounter = 26;
+                skipBtn.style.display = 'none';
                 break;
         }
         dialogueArea.classList.remove('goDown');
@@ -617,19 +619,19 @@ function checkCollision() {
     
     // check apple
     let currentCell = gameGrid[head[0]].cells[head[1]];
-    if (currentCell.classList.contains('apple')) {
+    if (currentCell && currentCell.classList.contains('apple')) {
         player.hasApple = true;
         currentCell.classList.toggle('apple');
     }
     // check weapon
-    if (currentCell.classList.contains('weapon')) {
+    if (currentCell && currentCell.classList.contains('weapon')) {
         currentCell.classList.toggle('weapon');
         player.hasWeapon = true;
         damageBoss();
         animateHit();
     }
 
-    if (currentCell.classList.contains('buff')) {
+    if (currentCell && currentCell.classList.contains('buff')) {
         let name = gameState.buffName;
         buffs[name].consume();
         currentCell.classList.toggle('buff');
