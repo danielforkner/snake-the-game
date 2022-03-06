@@ -2,6 +2,7 @@ important!:
 - fix button layout for mobile
 - create hitanimation images for boss2 & boss3
 - can you find any loop that might be causing the game to crash seemingly randomly?
+- fix wall bug with new resizing 
 
 spells
 
