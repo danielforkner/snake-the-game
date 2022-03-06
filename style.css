@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Optimus Princeps';
-    src: url(/public/OptimusPrinceps.ttf);
+    src: url(./public/OptimusPrinceps.ttf);
 }
 
 * {
@@ -82,7 +82,7 @@ body {
     width: 100%;
     display: flex;
     justify-content: center;
-    background: url(/images/parallax-mountain-bg.png);
+    background: url(./images/parallax-mountain-bg.png);
     background-size: contain;
     z-index: -1;
 }
@@ -215,7 +215,7 @@ body {
 }
 
 .floor {
-    background: url(/images/floor.png);
+    background: url(./images/floor.png);
     height: 300px;
     display: flex;
     justify-content: center;
@@ -290,7 +290,7 @@ body {
 }
 
 .bossDeath {
-    background: url(images/fire.gif);
+    background: url(./images/fire.gif);
     background-position: center;
     background-size: cover;
     animation-name: fadeout;
@@ -327,20 +327,20 @@ body {
 
 /* PLAYER PARTS */
 .head {
-    background-image: url(/images/snake.gif);
+    background-image: url(./images/snake.gif);
     background-position: center; 
     background-size: contain; 
     background-repeat: no-repeat;
 }
 
 .leftHead {
-    background-image: url(/images/snakeLeft.gif);
+    background-image: url(./images/snakeLeft.gif);
     background-position: center; 
     background-size: contain; 
     background-repeat: no-repeat;
 }
 .body {
-    background-image: url(/images/orb_green.png);
+    background-image: url(./images/orb_green.png);
     background-position: center; 
     background-size: contain; 
     background-repeat: no-repeat;
@@ -350,14 +350,14 @@ body {
     height: 30px;
 }
 .fire.on {
-    background: url(/images/fire.gif);
+    background: url(./images/fire.gif);
     background-size: cover;
     background-repeat: no-repeat;
 }
 
 .border {
     height: calc(var(--board) / var(--borderFactor));
-    background: url(/images/candle.gif); 
+    background: url(./images/candle.gif); 
     background-position: center; 
     background-size: contain; 
     background-color: gray;
@@ -365,28 +365,28 @@ body {
 
 /* GAME PIECES */
 .apple {
-    background: url(/images/orb_blue.png);
+    background: url(./images/orb_blue.png);
     background-position: center; 
     background-size: contain; 
     background-repeat: no-repeat;
 }
 
 .weapon {
-    background: url(/images/weapon.png);
+    background: url(./images/weapon.png);
     background-position: center; 
     background-size: contain;
     background-repeat: no-repeat;
 }
 
 .buffDmg {
-    background: url(/images/dmgBuff.png);
+    background: url(./images/dmgBuff.png);
     background-position: center; 
     background-size: contain;
     background-repeat: no-repeat;
 }
 
 .slowTime {
-    background: url(/images/timeBuff.png);
+    background: url(./images/timeBuff.png);
     background-position: center; 
     background-size: contain;
     background-repeat: no-repeat;
