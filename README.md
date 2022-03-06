@@ -1,5 +1,13 @@
 # snake-the-game
 
+Use WASD, ArrowKeys, and buttons(mobile) to control Snake.
+Please email bugs to daniel.forkner@gmail.com.
+
+FEATURING: 
+- 3 bosses
+- spells
+- powerups
+
 Tech:
 - vanilla Javascript
 - https://gifmaker.me/
