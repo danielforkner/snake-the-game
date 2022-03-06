@@ -39,13 +39,14 @@ body {
     z-index: 1000;
 }
 
+#winContainer {
+    background-color: rgba(255, 255, 255, 0.85);
+    color: #4F0001;
+}
+
 .titleContainer > img {
     width: 300px;
     margin: 10px;
-    /* background: url(/images/bluefire.gif);
-    background-position: bottom;
-    background-repeat: no-repeat;
-    background-size: 50%; */
 }
 
 .titleContainer > p {

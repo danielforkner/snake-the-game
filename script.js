@@ -10,7 +10,7 @@
 // 7. boss logic
 
 // OBJECTS AND DIALOGUE
-let gameState = {
+const gameState = {
     currentBoss: 1,
     bossHealth: 100,
     isPaused: true,
@@ -24,7 +24,7 @@ let gameState = {
     buffName: null,
     weaponCounter: 30,
     appleCounter: 30,
-}
+};
 
 let player = {
     name: 'Snek',
@@ -112,7 +112,7 @@ let bosses = {
             spellOfTransform: function() {
                 this.isTransformed = true;
                 let img = document.getElementById('bossImg');
-                img.src = '/images/boss2transform.gif';
+                img.src = '/images/boss3transform.gif';
             },
         },
     },
@@ -132,15 +132,15 @@ let characters = {
 }
 
 const dialogue = [
-    'There is a monster below!!',
+    'Help! There is a monster below!!',
     'Only you can defeat it!',
     'Will you help?',
     'Thank you! What\'s your name hero?',
     '<input type="textarea" placeholder="your name" id="nameInput" />',
     'That\'s a silly name for a snake',
     'ADVANCE',
-    'Wow you really did a number on that boss',
     'Hello, I am the magician Neely',
+    'You really did a number on that boss!',
     'By now you must know how monsters work',
     'They can be killed by energy',
     'Collect energy to store it',
@@ -151,6 +151,15 @@ const dialogue = [
     'Well, I really must be going...',
     'NEELY GOES AWAY',
     '...',
+    'ADVANCE',
+    'Oh you\'re still alive?',
+    'err... I mean good to see you buddy!',
+    'This next boss is very powerful',
+    'Good luck',
+    'By the way have you seen my friend Neely anywhere?',
+    'ADVANCE',
+    'I can\'t believe it',
+    'Snakes really can be heroes',
     'ADVANCE',
 ];
 
@@ -168,7 +177,9 @@ const enterBtn = document.getElementById('enter');
 const title = document.querySelector('.titleContainer');
 const dialogueBtn = document.querySelector('.dialogueBtn');
 const textArea = document.querySelector('.text');
-const startBtn = document.querySelector('.skip');
+const skipBtn = document.querySelector('.skip');
+const level2 = document.querySelector('.level2')
+const level3 = document.querySelector('.level3')
 const dialogueArea = document.querySelector('.heroes');
 const dialogueText = document.querySelector('.dialogue');
 const friend = document.querySelector('.hero.left');
@@ -196,7 +207,7 @@ const buffDisplay = document.querySelector('.buffDisplay');
 let intervalID;
 
 // THE ALMIGHTY TICK
-tick = {
+const tick = {
     // count seconds 60 at a time
     startCounter: function() {
         setInterval(() => {
@@ -230,10 +241,10 @@ tick = {
                 gameState.level++;
                 gameState.currentBoss++;
                 killBoss(BOSS_DELAY);
-                if (gameState.currentBoss === bosses.getLength()) {
-                    youWin();
-                    return;
-                }
+                // if (gameState.currentBoss === bosses.getLength()) {
+                //     youWin();
+                //     return;
+                // }
                 this.resetBoard();
                 return;
             }
@@ -245,6 +256,7 @@ tick = {
         toggleDialogue();
         enterSnake();
         enterBoss();
+        skipBtn.style.display = 'block';
         setTimeout(() => {
             toggleFire(FIRE_DELAY);
         }, BOSS_DELAY);
@@ -264,22 +276,38 @@ tick = {
         toggleFire(FIRE_DELAY * 8);
         toggleDialogue();
     },
-    nextLevel: function() {
-        toggleDialogue();
-    },
 };
 
 // EVENT LISTENERS
 enterBtn.addEventListener('click', () => {
     title.classList.add('fadeOut');
     toggleDialogue();
+    setTimeout(() => {
+        title.style.display = 'none';
+    }, 3000)
 })
 
-startBtn.addEventListener('click', () => {
-    toggleDialogue();
-    // gameState.dialogueCounter = 7;
-    // startBtn.remove();
-    // tick.startGame();
+skipBtn.addEventListener('click', () => {
+    tick.startLevel();
+    skipBtn.style.display = 'none';
+})
+
+level2.addEventListener('click', () => {
+    level2.remove();
+    level3.remove();
+    skipBtn.style.display = 'none';
+    gameState.level = 2;
+    gameState.currentBoss = 2;
+    tick.startLevel();
+})
+
+level3.addEventListener('click', () => {
+    level2.remove();
+    level3.remove();
+    skipBtn.style.display = 'none';
+    gameState.level = 3;
+    gameState.currentBoss = 3;
+    tick.startLevel();
 })
 
 dialogueBtn.addEventListener('click', () => {
@@ -287,6 +315,10 @@ dialogueBtn.addEventListener('click', () => {
         player.name = document.getElementById('nameInput').value
     }
     if (dialogue[gameState.dialogueCounter] === 'ADVANCE') {
+        if (gameState.level === bosses.getLength()) {
+            youWin();
+            return;
+        }
         gameState.dialogueCounter++;
         tick.startLevel();
         setTimeout(() => {
@@ -374,9 +406,21 @@ function toggleDialogue() {
         switch (gameState.level) {
             case 1: 
                 img.src = characters.friend1.src;
+                gameState.dialogueCounter = 0;
                 break;
             case 2: 
                 img.src = characters.friend2.src;
+                gameState.dialogueCounter = 7;
+                break;
+            case 3: 
+                img.src = characters.friend1.src;
+                gameState.dialogueCounter = 20;
+                let door = document.getElementById('doorImg');
+                door.src = "/images/Dungeon-door-skull.png"
+                break;
+            case 4: 
+                img.src = characters.friend1.src;
+                gameState.dialogueCounter = 26;
                 break;
         }
         dialogueArea.classList.remove('goDown');
@@ -385,6 +429,7 @@ function toggleDialogue() {
         friend.classList.add('enterLeft')
         hero.classList.add('enterRight')
         dialogueText.classList.add('dialogueEnter');
+        textArea.innerHTML = dialogue[gameState.dialogueCounter]
         return;
     } else {
         dialogueArea.classList.remove('goUp');
@@ -741,9 +786,11 @@ function wipeBoard() {
 }
 
 function youWin() {
-    toggleFire(FIRE_DELAY * 8);
+    // toggleFire(FIRE_DELAY * 8);
     title.classList.remove('fadeOut');
     title.classList.add('fadeIn');
+    title.id = 'winContainer';
+    title.style.display = "";
     enterBtn.remove();
     let h1 = document.getElementById('gameName');
     h1.innerText = 'YOU WIN';
