@@ -98,6 +98,16 @@ let bosses = {
         health: 200,
         src: '/images/boss2.gif',
         hitAnimationSRC: '/images/boss2_hit.gif',
+        spells: {
+            list: ['spellOfMinion'],
+            spellOfMinion: function() {
+                let img = document.getElementById('bossImg');
+                img.src = '/images/boss2spell.png'
+                setTimeout(() => {
+                    img.src = '/images/boss2.gif'
+                }, 2000)
+            }
+        }
     },
     boss3: {
         startHealth: 1000,
@@ -106,16 +116,35 @@ let bosses = {
         hitAnimationSRC: '/images/boss3_hit.gif',
         src: '/images/boss3.gif',
         spells: {
+            list: ['spellOfMinion', 'spellOfTime'],
             spellOfTime: function() {
                 tick_speed *= 1.25;
+                let img = document.getElementById('bossImg');
+                img.src = '/images/boss3spell.png'
+                setTimeout(() => {
+                    if (bosses.boss3.isTransformed) {
+                        img.src = '/images/boss3transform.gif'
+                    } else {
+                        img.src = '/images/boss3.gif'
+                    }
+                }, 2000)
             },
             spellOfTransform: function() {
+                spell_interval = 20;
                 this.isTransformed = true;
                 let img = document.getElementById('bossImg');
                 img.src = '/images/boss3transform.gif';
             },
             spellOfMinion: function() {
-                
+                let img = document.getElementById('bossImg');
+                img.src = '/images/boss3spell.png'
+                setTimeout(() => {
+                    if (bosses.boss3.isTransformed) {
+                        img.src = '/images/boss3transform.gif'
+                    } else {
+                        img.src = '/images/boss3.gif'
+                    }
+                }, 2000)
             }
         },
     },
@@ -205,6 +234,7 @@ var dmg_muliplyer = 1;
 var tick_speed = 150;
 var second = 0;
 var buff_interval = 10;
+var spell_interval = 30;
 var buff_duration = 5000;
 const buffDisplay = document.querySelector('.buffDisplay');
 let intervalID;
@@ -218,6 +248,9 @@ const tick = {
                 if (second % buff_interval === 0) {
                     createBuff();
                     placeBuff();
+                }
+                if (second % spell_interval === 0 && gameState.level > 1) {
+                    castSpell();
                 }
             }
             second++
@@ -273,6 +306,8 @@ const tick = {
             placeApple();
             gameState.isPaused = false;
         }, BOSS_DELAY + ALL_FIRE_DELAY + tick_speed)
+        if (level2) level2.remove();
+        if (level3) level3.remove();
     },
     resetBoard: function() {
         player.hasWeapon = true;
@@ -787,6 +822,22 @@ function wipeBoard() {
             player.body = [[10, -1]];
             player.hasApple = false;
         }
+    }
+}
+
+function castSpell() {
+    let list2 = bosses.boss2.spells.list;
+    let list3 = bosses.boss3.spells.list;
+    let index;
+    switch (gameState.currentBoss) {
+        case 2: 
+            index = Math.floor(Math.random() * list2.length);
+            bosses.boss2.spells[list2[index]]();
+            break;
+        case 3: 
+            index = Math.floor(Math.random() * list3.length);
+            bosses.boss3.spells[list3[index]]();
+            break;
     }
 }
 
