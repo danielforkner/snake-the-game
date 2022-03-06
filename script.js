@@ -165,9 +165,9 @@ let characters = {
 }
 
 const dialogue = [
-    'Help! There is a monster below!!',
-    'Only you can defeat it!',
-    'Will you help?',
+    'Snake, I need your help!',
+    'There is a monster below!',
+    'Please defeat it!',
     'Thank you! What\'s your name hero?',
     '<input type="textarea" placeholder="your name" id="nameInput" />',
     'That\'s a silly name for a snake',
