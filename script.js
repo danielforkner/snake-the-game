@@ -91,21 +91,21 @@ let bosses = {
     boss1: {
         startHealth: 100,
         health: 100,
-        src: '/images/boss1.gif',
-        hitAnimationSRC: '/images/boss1_hit.gif',
+        src: './images/boss1.gif',
+        hitAnimationSRC: './images/boss1_hit.gif',
     },
     boss2: {
         startHealth: 200,
         health: 200,
-        src: '/images/boss2.gif',
-        hitAnimationSRC: '/images/boss2_hit.gif',
+        src: './images/boss2.gif',
+        hitAnimationSRC: './images/boss2_hit.gif',
         spells: {
             list: ['spellOfMinion'],
             spellOfMinion: function() {
                 let img = document.getElementById('bossImg');
-                img.src = '/images/boss2spell.png'
+                img.src = './images/boss2spell.png'
                 setTimeout(() => {
-                    img.src = '/images/boss2.gif'
+                    img.src = './images/boss2.gif'
                 }, 2000)
             }
         }
@@ -114,19 +114,19 @@ let bosses = {
         startHealth: 1000,
         health: 1000,
         isTransformed: false,
-        hitAnimationSRC: '/images/boss3_hit.gif',
-        src: '/images/boss3.gif',
+        hitAnimationSRC: './images/boss3_hit.gif',
+        src: './images/boss3.gif',
         spells: {
             list: ['spellOfMinion', 'spellOfTime'],
             spellOfTime: function() {
                 tick_speed *= 1.25;
                 let img = document.getElementById('bossImg');
-                img.src = '/images/boss3spell.png'
+                img.src = './images/boss3spell.png'
                 setTimeout(() => {
                     if (bosses.boss3.isTransformed) {
-                        img.src = '/images/boss3transform.gif'
+                        img.src = './images/boss3transform.gif'
                     } else {
-                        img.src = '/images/boss3.gif'
+                        img.src = './images/boss3.gif'
                     }
                 }, 2000)
             },
@@ -134,16 +134,16 @@ let bosses = {
                 spell_interval = 20;
                 this.isTransformed = true;
                 let img = document.getElementById('bossImg');
-                img.src = '/images/boss3transform.gif';
+                img.src = './images/boss3transform.gif';
             },
             spellOfMinion: function() {
                 let img = document.getElementById('bossImg');
-                img.src = '/images/boss3spell.png'
+                img.src = './images/boss3spell.png'
                 setTimeout(() => {
                     if (bosses.boss3.isTransformed) {
-                        img.src = '/images/boss3transform.gif'
+                        img.src = './images/boss3transform.gif'
                     } else {
-                        img.src = '/images/boss3.gif'
+                        img.src = './images/boss3.gif'
                     }
                 }, 2000)
             }
@@ -156,11 +156,11 @@ let bosses = {
 
 let characters = {
     friend1: {
-        src: '/images/friend1.png',
+        src: './images/friend1.png',
     },
     friend2: {
-        src: '/images/friend2.png',
-        leave: '/images/friend2.gif',
+        src: './images/friend2.png',
+        leave: './images/friend2.gif',
     },
 }
 
