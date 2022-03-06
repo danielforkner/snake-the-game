@@ -14,9 +14,9 @@
     --gameWidth: 600px;
     --cellSize: 20px;
     --hitHeight: 100px;
-    --boardHeightMobile: 185px;
-    --gameWidthMobile: 370px;
-    --cellSizeMobile: 12.33px;
+    --boardHeightMobile: 162.5px;
+    --gameWidthMobile: 325px;
+    --cellSizeMobile: 10.83px;
     --hitHeightMobile: 75px;
     --boardHeightLarge: 525px;
     --gameWidthLarge: 1050px;
@@ -472,7 +472,7 @@ body {
     }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 600px) {
     .board {
         top: 50%;
     }
