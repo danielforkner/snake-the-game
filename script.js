@@ -95,7 +95,7 @@ let bosses = {
     },
     boss2: {
         startHealth: 200,
-        health: 100,
+        health: 200,
         src: '/images/boss2.gif',
         hitAnimationSRC: '/images/boss2_hit.gif',
     },
@@ -114,6 +114,9 @@ let bosses = {
                 let img = document.getElementById('bossImg');
                 img.src = '/images/boss3transform.gif';
             },
+            spellOfMinion: function() {
+                
+            }
         },
     },
     getLength: function() {
@@ -253,6 +256,7 @@ const tick = {
         }, tick_speed);
     },
     startLevel: function() {
+        player.direction = 'right';
         toggleDialogue();
         enterSnake();
         enterBoss();
@@ -335,6 +339,7 @@ dialogueBtn.addEventListener('click', () => {
 })
 
 window.addEventListener('keydown', (e) => {
+    if (gameState.isPaused) return;
     switch (e.key) {
         case 'ArrowDown':
         case 's':
