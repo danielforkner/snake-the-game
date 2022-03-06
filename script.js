@@ -18,17 +18,18 @@ const gameState = {
     score: 0,
     level: 1,
     dialogueCounter: 0,
-    apple: [10, 5],
-    weapon: [15, 2],
+    apple: [6, 5],
+    weapon: [5, 2],
     buff: [],
     buffName: null,
     weaponCounter: 30,
     appleCounter: 30,
+    enterClicked: false,
 };
 
 let player = {
     name: 'Snek',
-    body: [[10, -1]],
+    body: [[08, -1]],
     direction: 'right',
     hasApple: false,
     hasWeapon: true,
@@ -198,13 +199,14 @@ const dialogue = [
 // GLOBAL VARIABLES
 const HEIGHT = 300; // height of gameArea in px
 const WIDTH = 600; // width of gameArea in px
-const TOTAL_CELLS = 800;
+const TOTAL_CELLS = 450;
 const CELL_SIZE = Math.sqrt(HEIGHT * WIDTH / TOTAL_CELLS);
 const ROWS = HEIGHT / CELL_SIZE;
 const COLS = WIDTH / CELL_SIZE;
 const gameArea = document.querySelector('.gameArea');
 createGameArea(); // rows and cols calculated based on h x w and cellsize. adjust accordingly.
 
+const mobileControls = document.querySelectorAll('.control');
 const enterBtn = document.getElementById('enter');
 const title = document.querySelector('.titleContainer');
 const dialogueBtn = document.querySelector('.dialogueBtn');
@@ -302,7 +304,7 @@ const tick = {
         }, BOSS_DELAY + ALL_FIRE_DELAY);
         setTimeout(() => {
             snake.style.display = 'none';
-            gameGrid[10].cells[0].classList.add('head');
+            gameGrid[08].cells[0].classList.add('head');
             placeApple();
             gameState.isPaused = false;
         }, BOSS_DELAY + ALL_FIRE_DELAY + tick_speed)
@@ -318,7 +320,9 @@ const tick = {
 };
 
 // EVENT LISTENERS
-enterBtn.addEventListener('click', () => {
+enterBtn.addEventListener('click', (e) => {
+    if (gameState.enterClicked) return;
+    gameState.enterClicked = true;
     title.classList.add('fadeOut');
     toggleDialogue();
     setTimeout(() => {
@@ -394,6 +398,26 @@ window.addEventListener('keydown', (e) => {
             break;
     }
 })
+
+for (let i = 0; i < 4; i++) {
+    mobileControls[i].addEventListener('click', (e) => {
+        if (gameState.isPaused) return;
+        switch (e.target.id) {
+             case 'up':
+                player.direction = 'up';
+                break;
+             case 'left':
+                player.direction = 'left';
+                break;
+             case 'right':
+                player.direction = 'right';
+                break;
+             case 'down':
+                player.direction = 'down';
+                break;
+         }
+    });
+}
 
 // CREATE GAME
 function createGameArea() {
@@ -819,7 +843,7 @@ function wipeBoard() {
     for (let i = 0; i < ROWS; i++) {
         for (let j = 0; j < COLS; j++) {
             gameGrid[i].cells[j].className = 'cell';
-            player.body = [[10, -1]];
+            player.body = [[08, -1]];
             player.hasApple = false;
         }
     }

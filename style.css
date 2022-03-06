@@ -12,7 +12,7 @@
 :root {
     --board: 300px;
     --borderFactor: 6;
-    --cellSize: 15px;
+    --cellSize: 20px;
 }
 
 body {
@@ -317,11 +317,13 @@ body {
 }
 
 .cell {
-    height: 15px;
-    width: 15px;
+    height: var(--cellSize);
+    width: var(--cellSize);
     /* transition: 1s ease; */
     /* border: 1px solid blue; */
 }
+
+
 
 /* PLAYER PARTS */
 .head {
@@ -406,6 +408,46 @@ body {
     padding: 5px;
     border: 1px solid white;
     background-color: #4F0001;
+}
+
+.mobileControls {
+    opacity: 0;
+    margin-top: 20px;
+    position: absolute;
+    bottom: -150px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.control {
+    text-align: center;
+    padding: 10px;
+    width: 50px;
+    height: 50px;
+}
+
+/* MEDIA SCREEN */
+@media screen and (max-width: 800px) {
+    .board {
+        top: 50%;
+    }
+    .mobileControls {
+        opacity: 1;
+    }
+    /* .floor {
+        height:
+    }
+    .gameArea {
+        width: 
+    } */
+    /* .cell {
+        width: calc();
+        height: calc();
+    } */
 }
 
 /* ANIMATIONS */
