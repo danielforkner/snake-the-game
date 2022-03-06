@@ -494,7 +494,7 @@ body {
         height: var(--boardHeightMobile);
     }
     .gameArea {
-        width: var(--gameWidthMobile);
+        min-width: var(--gameWidthMobile);
     }
     .hitAnimation {
         width: var(--gameWidthMobile);
