@@ -1,6 +1,6 @@
 important!: 
 - fix button layout for mobile
-- can you find any loop that might be causing the game to crash seemingly randomly?
+- add a "reset" button to the youLose container
 
 spells
 

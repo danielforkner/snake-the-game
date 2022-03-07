@@ -20,6 +20,8 @@ const gameState = {
     dialogueCounter: 0,
     apple: [6, 5],
     weapon: [5, 2],
+    minion: [],
+    isMinion: false,
     buff: [],
     buffName: null,
     weaponCounter: 30,
@@ -51,7 +53,7 @@ let player = {
     },
 }
 
-let collisionClasses = ['head', 'body', 'apple', 'weapon', 'buff'];
+let collisionClasses = ['head', 'body', 'apple', 'weapon', 'buff', 'minion'];
 
 let buffs = {
     damageMultiplyer: {
@@ -100,7 +102,6 @@ let buffs = {
             }, 5000)
         },
     },
-
 }
 
 let bosses = {
@@ -118,6 +119,7 @@ let bosses = {
         spells: {
             list: ['spellOfMinion'],
             spellOfMinion: function() {
+                gameState.isMinion = true;
                 let img = document.getElementById('bossImg');
                 img.src = './images/boss2spell.png'
                 setTimeout(() => {
@@ -135,7 +137,9 @@ let bosses = {
         spells: {
             list: ['spellOfMinion', 'spellOfTime'],
             spellOfTime: function() {
-                tick_speed *= 1.15;
+                clearInterval(intervalID);
+                tick_speed /= 2;
+                tick.startTick();
                 let img = document.getElementById('bossImg');
                 if (bosses.boss3.isTransformed) {
                     img.src = './images/boss3Tspell.png';
@@ -148,15 +152,21 @@ let bosses = {
                     } else {
                         img.src = './images/boss3.gif'
                     }
-                }, 2000)
+                }, 2000),
+                setTimeout(() => {
+                    clearInterval(intervalID);
+                    tick_speed *= 2;
+                    tick.startTick()
+                }, 4000)
             },
             spellOfTransform: function() {
-                spell_interval = 20;
+                spell_interval = 10;
                 this.isTransformed = true;
                 let img = document.getElementById('bossImg');
                 img.src = './images/boss3transform.gif';
             },
             spellOfMinion: function() {
+                gameState.isMinion = true;
                 let img = document.getElementById('bossImg');
                 if (bosses.boss3.isTransformed) {
                     img.src = './images/boss3Tspell.png';
@@ -263,7 +273,7 @@ var dmg_muliplyer = 1;
 var tick_speed = 150;
 var second = 0;
 var buff_interval = 10;
-var spell_interval = 30;
+var spell_interval = 20;
 var buff_duration = 5000;
 const buffDisplay = document.querySelector('.buffDisplay');
 let intervalID;
@@ -648,9 +658,15 @@ function checkCollision() {
             return true;
         }
     }
+
+    let currentCell = gameGrid[head[0]].cells[head[1]];
+    // check minion
+    if (currentCell && currentCell.classList.contains('minion')) {
+        gameState.isPaused = true;
+        gameState.hasLost = true;
+    }
     
     // check apple
-    let currentCell = gameGrid[head[0]].cells[head[1]];
     if (currentCell && currentCell.classList.contains('apple')) {
         player.hasApple = true;
         currentCell.classList.toggle('apple');
@@ -663,6 +679,7 @@ function checkCollision() {
         animateHit();
     }
 
+    // check buff
     if (currentCell && currentCell.classList.contains('buff')) {
         let name = gameState.buffName;
         buffs[name].consume();
@@ -724,6 +741,13 @@ function updateGameArea(newHead, oldHead, lostTail) {
         createWeapon();
         placeWeapon();
     }
+
+    // place Minion
+    if (gameState.isMinion) {
+        gameState.isMinion = false;
+        createMinion();
+        placeMinion();
+    }
 }
 
 function togglePause() {
@@ -733,6 +757,24 @@ function togglePause() {
     }
     gameState.isPaused = true;
     return;
+}
+
+function createMinion() {
+    let collision;
+    let row, col;
+    do {
+        collision = false;
+        row = Math.floor(Math.random() * ROWS)
+        col = Math.floor(Math.random() * COLS)
+        let target = gameGrid[row].cells[col]
+        for (let i = 0; i < collisionClasses.length; i++) {
+            if (target.classList.contains(collisionClasses[i])) {
+                collision = true;
+                break;
+            }
+        }
+    } while (collision === true);
+    gameState.minion = [row, col];
 }
 
 function createApple() {
@@ -792,6 +834,12 @@ function createWeapon() {
         }
     } while (collision === true);
     gameState.weapon = [row, col];
+}
+
+function placeMinion() {
+    let minion = gameState.minion;
+    let cell = gameGrid[minion[0]].cells[minion[1]];
+    cell.classList.add('minion');
 }
 
 function placeBuff() {

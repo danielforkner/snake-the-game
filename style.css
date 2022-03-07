@@ -427,6 +427,13 @@ body {
     background-repeat: no-repeat;
 }
 
+.minion {
+    background: url(./images/minion.gif);
+    background-position: center; 
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
 .buffDisplay {
     position: absolute;
     bottom: -50px;
