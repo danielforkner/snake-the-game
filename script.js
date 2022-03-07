@@ -736,9 +736,10 @@ function togglePause() {
 }
 
 function createApple() {
-    let collision = false;
+    let collision;
     let row, col;
     do {
+        collision = false;
         row = Math.floor(Math.random() * ROWS)
         col = Math.floor(Math.random() * COLS)
         let target = gameGrid[row].cells[col]
@@ -758,9 +759,10 @@ function createBuff() {
     if (currentBuff !== null) {
         currentBuff.className = 'cell';
     }
-    let collision = false;
+    let collision;
     let row, col;
     do {
+        collision = false;
         row = Math.floor(Math.random() * ROWS)
         col = Math.floor(Math.random() * COLS)
         let target = gameGrid[row].cells[col]
@@ -775,9 +777,10 @@ function createBuff() {
 }
 
 function createWeapon() {
-    let collision = false;
+    let collision;
     let row, col;
     do {
+        collision = false;
         row = Math.floor(Math.random() * ROWS)
         col = Math.floor(Math.random() * COLS)
         let target = gameGrid[row].cells[col]
