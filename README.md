@@ -3,19 +3,23 @@
 [LIVE DEMO](https://danielforkner.github.io/snake-the-game/)
 
 Use WASD, ArrowKeys, and buttons(mobile) to control Snake.
-Please email bugs to daniel.forkner@gmail.com.
+Please email bugs and suggestions to daniel.forkner@gmail.com.
 
-FEATURING: 
+FEATURING:
+
 - 3 bosses
-- spells
+- boss spells
 - powerups
 
 Tech:
+
 - vanilla Javascript
 - https://gifmaker.me/
 - https://pixlr.com/
 
 Assets thanks to:
+
+- minions: drakzlin https://opengameart.org/content/20x20-tileset
 - candle: BeLuckyDaf https://opengameart.org/content/candle
 - floor: Cethiel https://opengameart.org/content/tileable-brick-ground-textures-set-2-brick03png
 - fire: Spring Spring https://opengameart.org/content/fire-0

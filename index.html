@@ -1,84 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
     <title>Snake: the game!</title>
-</head>
-<body>
+  </head>
+  <body>
     <div class="titleContainer">
-        <h1 id="gameName">Snake: the game!</h1>
-        <img src="images/bosses.png">
-        <p id="enter">ENTER</p>
+      <h1 id="gameName">Snake: the game!</h1>
+      <img src="images/bosses.png" />
+      <p id="enter">ENTER</p>
     </div>
     <div class="skipButtons">
-        <button class="skip">Skip Dialogue</button>
-        <button class="level2">Skip to Level 2</button>
-        <button class="level3">Skip to Level 3</button>
+      <button class="skip">Skip Dialogue</button>
+      <button class="level2">Skip to Level 2</button>
+      <button class="level3">Skip to Level 3</button>
     </div>
     <div class="board">
-        <div class="loseContainer">
-            <div class="loseText">
-                <div class="loseTitle">YOU DIED</div> 
-                <div class="loseScore">Final Score</div>
-            </div>
+      <div class="loseContainer">
+        <div class="loseText">
+          <div class="loseTitle">YOU DIED</div>
+          <div class="loseScore">Final Score</div>
+          <p class="restart">RESTART</p>
         </div>
-        <div class="heroes down"> 
-            <div class="hero left"><img id="friendImg" src="./images/friend1.png" alt=""></div>
-            <div class="door">
-                <div class="dialogue">
-                    <div class="text">Snake, I need your help!</div>
-                    <button class="dialogueBtn">Sss</button>
-                </div>
-                <img id="doorImg" src="./images/Dungeon-door.png"></div>
-                <div class="hero right"><img src="./images/snakeLeft.gif" alt=""></div>
-            </div>
-            <div class="border"></div>
-            <div class="floor">
-                <div class="column" style="border-right: 12px solid transparent">
-                    <div class="fire"></div>
-                <div class="fire"></div>
-                <div class="fire"></div>
-                <div class="fire"></div>
-                <div class="fire"></div>
-                <div class="fire"></div>
-                <div class="fire"></div>
-                <div class="fire"></div>
-                <div class="fire"></div>
-                <div class="fire"></div>
-            </div>
-            <div class="gameArea">
-                <div class="hitAnimation"></div>
-                <div class="boss"><img id="bossImg" src="./images/boss1.gif"><div class="healthbar"><div class="bar"></div></div></div>
-                <div class="snake"><img src="./images/snake.gif"></div>
-            </div>
-            <div class="column" style="border-left: 12px solid transparent">
-                <div class="fire"></div>
-                <div class="fire"></div>
-                <div class="fire"></div>
-                <div class="fire"></div>
-                <div class="fire"></div>
-                <div class="fire"></div>
-                <div class="fire"></div>
-                <div class="fire"></div>
-                <div class="fire"></div>
-                <div class="fire"></div>
-            </div>
+      </div>
+      <div class="heroes down">
+        <div class="hero left">
+          <img id="friendImg" src="./images/friend1.png" alt="" />
         </div>
-        <div class="border"></div>
-        <div class="buffDisplay"></div>
-        <div class="mobileControls">
-            <button class="control" id="up"><img src="./images/icons/up.png"></button>
-            <div class="bottomControls">
-                <button class="control" id="left"><img src="./images/icons/left.png"></button>
-                <button class="control" id="down"><img src="./images/icons/down.png"></button>
-                <button class="control" id="right"><img src="./images/icons/right.png"></button>
-            </div>
+        <div class="door">
+          <div class="dialogue">
+            <div class="text">Snake, I need your help!</div>
+            <button class="dialogueBtn">Sss</button>
+          </div>
+          <img id="doorImg" src="./images/Dungeon-door.png" />
         </div>
+        <div class="hero right">
+          <img src="./images/snakeLeft.gif" alt="" />
+        </div>
+      </div>
+      <div class="border"></div>
+      <div class="floor">
+        <div class="column" style="border-right: 12px solid transparent">
+          <div class="fire"></div>
+          <div class="fire"></div>
+          <div class="fire"></div>
+          <div class="fire"></div>
+          <div class="fire"></div>
+          <div class="fire"></div>
+          <div class="fire"></div>
+          <div class="fire"></div>
+          <div class="fire"></div>
+          <div class="fire"></div>
+        </div>
+        <div class="gameArea">
+          <div class="hitAnimation"></div>
+          <div class="boss">
+            <img id="bossImg" src="./images/boss1.gif" />
+            <div class="healthbar"><div class="bar"></div></div>
+          </div>
+          <div class="snake"><img src="./images/snake.gif" /></div>
+        </div>
+        <div class="column" style="border-left: 12px solid transparent">
+          <div class="fire"></div>
+          <div class="fire"></div>
+          <div class="fire"></div>
+          <div class="fire"></div>
+          <div class="fire"></div>
+          <div class="fire"></div>
+          <div class="fire"></div>
+          <div class="fire"></div>
+          <div class="fire"></div>
+          <div class="fire"></div>
+        </div>
+      </div>
+      <div class="border"></div>
+      <div class="buffDisplay"></div>
+      <div class="mobileControls">
+        <button class="control" id="up">
+          <img src="./images/icons/up.png" />
+        </button>
+        <div class="bottomControls">
+          <button class="control" id="left">
+            <img src="./images/icons/left.png" />
+          </button>
+          <button class="control" id="down">
+            <img src="./images/icons/down.png" />
+          </button>
+          <button class="control" id="right">
+            <img src="./images/icons/right.png" />
+          </button>
+        </div>
+      </div>
     </div>
-    
+
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
