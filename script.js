@@ -24,6 +24,7 @@ const gameState = {
     buffName: null,
     weaponCounter: 30,
     appleCounter: 30,
+    apple_multiplyer: 1,
     enterClicked: false,
 };
 
@@ -84,7 +85,22 @@ let buffs = {
                 tick.startTick();
             }, buff_duration)
         },
-    }
+    },
+    applePlenty: {
+        className: 'makeApples',
+        consume: function() {
+            gameState.apple_multiplyer = 10;
+            let display = document.createElement('p');
+            display.id = 'appleMultiplyer';
+            buffDisplay.append(display);
+            display.innerHTML = `Energy!!`;
+            setTimeout(() => {
+                display.remove();
+                gameState.apple_multiplyer = 1;
+            }, 5000)
+        },
+    },
+
 }
 
 let bosses = {
@@ -119,9 +135,13 @@ let bosses = {
         spells: {
             list: ['spellOfMinion', 'spellOfTime'],
             spellOfTime: function() {
-                tick_speed *= 1.25;
+                tick_speed *= 1.15;
                 let img = document.getElementById('bossImg');
-                img.src = './images/boss3spell.png'
+                if (bosses.boss3.isTransformed) {
+                    img.src = './images/boss3Tspell.png';
+                } else {
+                    img.src = './images/boss3spell.png';
+                }
                 setTimeout(() => {
                     if (bosses.boss3.isTransformed) {
                         img.src = './images/boss3transform.gif'
@@ -138,7 +158,11 @@ let bosses = {
             },
             spellOfMinion: function() {
                 let img = document.getElementById('bossImg');
-                img.src = './images/boss3spell.png'
+                if (bosses.boss3.isTransformed) {
+                    img.src = './images/boss3Tspell.png';
+                } else {
+                    img.src = './images/boss3spell.png';
+                }
                 setTimeout(() => {
                     if (bosses.boss3.isTransformed) {
                         img.src = './images/boss3transform.gif'
@@ -784,7 +808,7 @@ function placeApple() {
     let apple = gameState.apple;
     let cell = gameGrid[apple[0]].cells[apple[1]];
     cell.classList.toggle('apple');
-    gameState.appleCounter = 30;
+    gameState.appleCounter = 30 / gameState.apple_multiplyer;
 }
 
 

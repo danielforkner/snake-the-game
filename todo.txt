@@ -1,14 +1,12 @@
 important!: 
 - fix button layout for mobile
-- create hitanimation images for boss2 & boss3
 - can you find any loop that might be causing the game to crash seemingly randomly?
-- fix wall bug with new resizing 
 
 spells
 
-use colissionClassses to check for create'item' conflicts
-
 replace switch statements with string literals like characters[`boss${gameState.currentBoss}`]. IF DOESNT WORK ASK QUESTION
 
-mobile and screen responsive
 
+   applePlenty: {
+        className: 'makeApples'
+    },... add css class for the buff. make the buff change apple_multiplyer to 10. make an item image.

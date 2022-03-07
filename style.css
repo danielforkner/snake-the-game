@@ -40,6 +40,17 @@ body {
     background-color: #866286;
 }
 
+.skipButtons {
+    display: flex;
+    justify-content: center;
+}
+
+.skipButtons > button {
+    background-color: #4F0001;
+    color: white;
+    padding: 5px;
+}
+
 .titleContainer {
     font-family: 'Optimus Princeps', sans-serif;
     background-color: rgba(0, 0, 0, 0.9);
@@ -409,6 +420,13 @@ body {
     background-repeat: no-repeat;
 }
 
+.makeApples {
+    background: url(./images/appleMultiplyer.png);
+    background-position: center; 
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
 .buffDisplay {
     position: absolute;
     bottom: -50px;
@@ -469,6 +487,13 @@ body {
     }
     .boss {
         width: 250px;
+    }
+    .enterBoss {
+        animation-name: enterBossLarge, hover;
+        animation-duration: 5s, 10s;
+        animation-delay: 3s, 8s;
+        animation-fill-mode: forwards, forwards;
+        animation-iteration-count: 1, infinite;
     }
 }
 
@@ -597,15 +622,29 @@ body {
 @keyframes enterBossMobile {
     0% {
         opacity: 0;
-        right: 225px;
+        right: -500px;
     }
     50% {
         opacity: 0.5;
-        right: 225px
+        right: 50%;
     }
     100% {
         opacity: 1;
-        right: 225px
+        right: 50%;
+    }
+}
+@keyframes enterBossLarge {
+    0% {
+        opacity: 0;
+        right: -450px;
+    }
+    50% {
+        opacity: 0.5;
+        right: -175px
+    }
+    100% {
+        opacity: 1;
+        right: -175px
     }
 }
 
