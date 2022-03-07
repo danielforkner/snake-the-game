@@ -957,7 +957,6 @@ function castSpell() {
 }
 
 function youWin() {
-  toggleDialogue();
   title.classList.remove('fadeOut');
   title.classList.add('fadeIn');
   title.id = 'winContainer';
@@ -980,7 +979,6 @@ function youWin() {
 }
 
 function youLose() {
-  toggleDialogue();
   gameState.isPaused = true;
   let score = document.querySelector('.loseScore');
   score.innerText = `${gameState.score} damage dealt`;
