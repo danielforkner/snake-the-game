@@ -3,7 +3,6 @@
 [LIVE DEMO](https://danielforkner.github.io/snake-the-game/)
 
 Use WASD, ArrowKeys, and buttons(mobile) to control Snake.
-Please email bugs and suggestions to daniel.forkner@gmail.com.
 
 FEATURING:
 
